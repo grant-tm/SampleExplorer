@@ -1,13 +1,12 @@
 #include <JuceHeader.h>
 #include "MainComponent.h"
-
-#include "sqlite3.h"
-
-sqlite3 *sqlite;
+#include "Database.h"
 
 class SampleExplorerApplication  : public juce::JUCEApplication
 {
 public:
+    Database database;
+
     SampleExplorerApplication() {}
 
     const juce::String getApplicationName() override       { return ProjectInfo::projectName; }
@@ -17,6 +16,11 @@ public:
     void initialise (const juce::String& commandLine) override
     {
         // This method is where you should put your application's initialisation code..
+        //juce::String directory("D:/Samples/Instruments/Guitar/One Shots");
+        juce::String directory("D:/Samples/");
+
+        database.scanDirectory(directory, ScanMode::Recursive, ProcessMode::Index);
+        DBG("Scan Complete!");
         mainWindow.reset (new MainWindow (getApplicationName()));
     }
 

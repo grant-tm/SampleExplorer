@@ -42,9 +42,25 @@ public:
 class Database
 {
 public:
-	void scanDirectory (juce::String &directoryPath, ScanMode scanMode, ProcessMode procMode);
+	
+    Database();
+    Database(juce::String);
+
+    int getNumRecords();
+
+    void scanDirectory (juce::String &directoryPath, ScanMode scanMode, ProcessMode procMode);
+
     DatabaseRecord makeRecordFromFile(juce::File);
+
+    void insertRecord(DatabaseRecord &);
+    void insertRecords(juce::Array<DatabaseRecord>);
+
 private:
+
+    bool isOpen;
+
+    sqlite3 *sqliteDatabase;
+
 };
 
 #endif // DATABASE_H
