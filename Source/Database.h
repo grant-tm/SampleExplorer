@@ -6,21 +6,6 @@
 #include "ThreadSafeFIFO.h"
 #include "sqlite3.h"
 
-enum ScanMode
-{
-    Linear,
-    Recursive,
-    NumScanModes
-};
-
-enum ProcessMode
-{
-    Index,
-    Analyze,
-    IndexAndAnalyze,
-    NumProcessModes
-};
-
 //=============================================================================
 // Record
 
@@ -30,7 +15,7 @@ public:
     DatabaseRecord();
     DatabaseRecord(juce::String);
     DatabaseRecord(juce::File);
-    ~DatabaseRecord();
+    ~DatabaseRecord(){};
 
     juce::String filePath;
     juce::String fileName;
@@ -46,22 +31,17 @@ public:
     Database();
     Database(juce::String);
 
-    int getNumRecords();
-    bool filePathUsedAsID(juce::String filePath);
-
-    void scanDirectory (juce::String &directoryPath, ScanMode scanMode, ProcessMode procMode);
-
-    DatabaseRecord makeRecordFromFile(juce::File);
+    int getNumRecords() const;
+    bool filePathUsedAsID(juce::String filePath) const;
 
     void insertRecord(DatabaseRecord &);
     void insertRecords(juce::Array<DatabaseRecord>);
 
+    void scanDirectory (juce::String &directoryPath);
+    DatabaseRecord makeRecordFromFile(juce::File);
+
 private:
-
-    bool isOpen;
-
     sqlite3 *sqliteDatabase;
-
 };
 
 #endif // DATABASE_H

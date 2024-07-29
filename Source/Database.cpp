@@ -15,17 +15,12 @@ DatabaseRecord::DatabaseRecord(juce::File file)
     filePath = file.getFullPathName();
 }
 
-DatabaseRecord::~DatabaseRecord()
-{
-
-}
-
 //-----------------------------------------------------------------------------
+// CONSTRUCTORS
 
 Database::Database() 
 {
     sqliteDatabase = nullptr;
-    isOpen = false;
 
     const auto flags = SQLITE_OPEN_READWRITE |
         SQLITE_OPEN_CREATE |
@@ -52,16 +47,17 @@ Database::Database()
     }
     else {
         DBG("Database::Database: Table created successfully!");
-        isOpen = true;
     }
-
 }
 
-int Database::getNumRecords() 
+//=============================================================================
+// GETTERS
+
+int Database::getNumRecords() const
 {
     // prepare statement to select the count of all rows in the table
     sqlite3_stmt *stmt;
-    char *sql = "SELECT COUNT(*) FROM audio_files";
+    const char *sql = "SELECT COUNT(*) FROM audio_files";
     if (sqlite3_prepare_v2(sqliteDatabase, sql, -1, &stmt, nullptr) != SQLITE_OK) {
         DBG("Database::num_rows: Failed to prepare statement.\n");
         jassert(false);
@@ -69,7 +65,7 @@ int Database::getNumRecords()
 
     // run select statement and return result if successful
     if (sqlite3_step(stmt) == SQLITE_ROW) {
-        int row_count = sqlite3_column_int(stmt, 0);
+        const int row_count = sqlite3_column_int(stmt, 0);
         sqlite3_finalize(stmt);
         return row_count;
     }
@@ -83,11 +79,11 @@ int Database::getNumRecords()
     return -1;
 }
 
-bool Database::filePathUsedAsID(juce::String filePath)
+bool Database::filePathUsedAsID(juce::String filePath) const
 {
     // prepare the SQL statement to select 1 entry with matching filePath
     sqlite3_stmt *stmt;
-    char *sql = "SELECT 1 FROM audio_files WHERE filePath = ? LIMIT 1;";
+    const char *sql = "SELECT 1 FROM audio_files WHERE filePath = ? LIMIT 1;";
     if (sqlite3_prepare_v2(sqliteDatabase, sql, -1, &stmt, nullptr) != SQLITE_OK)
     {
         DBG("Database::filePathUsedAsID: Failed to prepare SELECT statement.");
@@ -104,18 +100,13 @@ bool Database::filePathUsedAsID(juce::String filePath)
     }
 
     // execute the SQL statement and return result
-    bool exists = (sqlite3_step(stmt) == SQLITE_ROW);
+    const bool exists = (sqlite3_step(stmt) == SQLITE_ROW);
     sqlite3_finalize(stmt);
     return exists;
 }
 
-DatabaseRecord Database::makeRecordFromFile(juce::File file)
-{
-    DatabaseRecord record;
-    record.filePath = file.getFullPathName();
-    record.fileName = file.getFileName();
-    return record;
-}
+//=============================================================================
+// INSERT
 
 void Database::insertRecord(DatabaseRecord &record)
 {
@@ -174,7 +165,10 @@ void Database::insertRecords(juce::Array<DatabaseRecord> records)
     sqlite3_finalize(stmt);
 }
 
-void Database::scanDirectory (juce::String &directoryPath, ScanMode scanMode, ProcessMode procMode)
+//=============================================================================
+// SCAN
+
+void Database::scanDirectory (juce::String &directoryPath)
 {
     const double startTime = juce::Time::getMillisecondCounterHiRes();   
 
@@ -207,4 +201,12 @@ void Database::scanDirectory (juce::String &directoryPath, ScanMode scanMode, Pr
     DBG("Elapsed Timed: " << elapsedTime << " ms");
     DBG("Database Size: " << getNumRecords());
 
+}
+
+DatabaseRecord Database::makeRecordFromFile(juce::File file)
+{
+    DatabaseRecord record;
+    record.filePath = file.getFullPathName();
+    record.fileName = file.getFileName();
+    return record;
 }
