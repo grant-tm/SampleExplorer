@@ -1,26 +1,19 @@
-/*
-  ==============================================================================
-
-    This file contains the basic startup code for a JUCE application.
-
-  ==============================================================================
-*/
-
 #include <JuceHeader.h>
 #include "MainComponent.h"
 
-//==============================================================================
+#include "sqlite3.h"
+
+sqlite3 *sqlite;
+
 class SampleExplorerApplication  : public juce::JUCEApplication
 {
 public:
-    //==============================================================================
     SampleExplorerApplication() {}
 
     const juce::String getApplicationName() override       { return ProjectInfo::projectName; }
     const juce::String getApplicationVersion() override    { return ProjectInfo::versionString; }
     bool moreThanOneInstanceAllowed() override             { return false; }
 
-    //==============================================================================
     void initialise (const juce::String& commandLine) override
     {
         // This method is where you should put your application's initialisation code..
@@ -34,9 +27,6 @@ public:
         mainWindow = nullptr; // (deletes our window)
     }
 
-    //==============================================================================
-    
-    
     void systemRequestedQuit() override
     {
         // This is called when the app is being asked to quit: you can ignore this

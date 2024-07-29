@@ -25,7 +25,8 @@
   </MODULES>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
   <EXPORTFORMATS>
-    <VS2022 targetFolder="Builds/VisualStudio2022">
+    <VS2022 targetFolder="Builds/VisualStudio2022" extraCompilerFlags="/I&quot;C:\Users\Grant\vcpkg\packages\sqlite3_x64-windows\include\sqlite3.h&quot;"
+            externalLibraries="&quot;C:\Users\Grant\vcpkg\packages\sqlite3_x64-windows\lib\sqlite3.lib&quot;">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" targetName="SampleExplorer"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="SampleExplorer"/>
