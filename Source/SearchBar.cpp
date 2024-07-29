@@ -5,7 +5,7 @@ SearchBar::SearchBar() : juce::TextEditor()
 {
     setReadOnly(false);
     setTextToShowWhenEmpty("Search...", SEARCHBAR_UNFOCUSED_TEXT_COLOR);
- 
+
     // single line
     setMultiLine(false);
     setReturnKeyStartsNewLine(false);

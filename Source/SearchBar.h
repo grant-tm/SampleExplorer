@@ -11,7 +11,7 @@ class SearchBar : public juce::TextEditor
 {
 public:
 	SearchBar();
-	~SearchBar() {};
+	~SearchBar() override = default;
 private:
 };
 
