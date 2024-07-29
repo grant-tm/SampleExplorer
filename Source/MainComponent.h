@@ -2,17 +2,18 @@
 #define MAIN_COMPONENT_H
 
 #include <JuceHeader.h>
+#include "SearchBar.h"
 
 // Size Constants
 
-#define DEFAULT_WIDTH   475
-#define DEFAULT_HEIGHT  650
+#define DEFAULT_WIDTH   360
+#define DEFAULT_HEIGHT  490
 
-#define MINIMUM_WIDTH   int(DEFAULT_WIDTH * 0.5)
-#define MINIMUM_HEIGHT  int(DEFAULT_HEIGHT * 0.5)
+#define MINIMUM_WIDTH   int(DEFAULT_WIDTH * 0.75)
+#define MINIMUM_HEIGHT  int(DEFAULT_HEIGHT * 0.75)
 
 #define MAXIMUM_WIDTH   int(DEFAULT_WIDTH * 1.5)
-#define MAXIMUM_HEIGHT  int(DEFAULT_HEIGHT * 1.5)
+#define MAXIMUM_HEIGHT  int(DEFAULT_HEIGHT * 1.25)
 
 // Color Constants
 
@@ -23,9 +24,6 @@
 
 #define GUI_TEXT_WHITE      juce::Colour(0xFFE3E3E3)
 #define GUI_TEXT_GRAY       juce::Colour(0xFF959595)
-
-#define GUI_SEARCH_BAR_BG   juce::Colour(0xFFE3E3E3)
-#define GUI_SEARCH_BAR_TXT  juce::Colour(0xFF828282)
 
 //==============================================================================
 /*
@@ -47,7 +45,7 @@ private:
     //==============================================================================
     // Your private member variables go here...
 
-
+    SearchBar searchBar;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
 
