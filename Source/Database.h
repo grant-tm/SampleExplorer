@@ -47,6 +47,7 @@ public:
     Database(juce::String);
 
     int getNumRecords();
+    bool filePathUsedAsID(juce::String filePath);
 
     void scanDirectory (juce::String &directoryPath, ScanMode scanMode, ProcessMode procMode);
 

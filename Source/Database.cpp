@@ -57,16 +57,17 @@ Database::Database()
 
 }
 
-int Database::getNumRecords() {
+int Database::getNumRecords() 
+{
     // prepare statement to select the count of all rows in the table
     sqlite3_stmt *stmt;
-
     char *sql = "SELECT COUNT(*) FROM audio_files";
     if (sqlite3_prepare_v2(sqliteDatabase, sql, -1, &stmt, nullptr) != SQLITE_OK) {
         DBG("Database::num_rows: Failed to prepare statement.\n");
         jassert(false);
     }
 
+    // run select statement and return result if successful
     if (sqlite3_step(stmt) == SQLITE_ROW) {
         int row_count = sqlite3_column_int(stmt, 0);
         sqlite3_finalize(stmt);
@@ -79,7 +80,31 @@ int Database::getNumRecords() {
     }
 
     jassert(false);
-    return -1; // error
+    return -1;
+}
+
+bool Database::filePathUsedAsID(juce::String filePath)
+{
+    // prepare the SQL statement to select 1 entry with matching filePath
+    sqlite3_stmt *stmt;
+    char *sql = "SELECT 1 FROM audio_files WHERE filePath = ? LIMIT 1;";
+    if (sqlite3_prepare_v2(sqliteDatabase, sql, -1, &stmt, nullptr) != SQLITE_OK)
+    {
+        DBG("Database::filePathUsedAsID: Failed to prepare SELECT statement\n");
+        jassert(false);
+    }
+
+    // bind the filePath parameter to the select statment
+    if (sqlite3_bind_text16(stmt, 1, filePath.toRawUTF8(), -1, SQLITE_TRANSIENT) != SQLITE_OK)
+    {
+        DBG("Database:entry_exists: Failed to bind values.\n");
+        jassert(false);
+    }
+
+    // execute the SQL statement and return result
+    bool exists = (sqlite3_step(stmt) == SQLITE_ROW);
+    sqlite3_finalize(stmt);
+    return exists;
 }
 
 DatabaseRecord Database::makeRecordFromFile(juce::File file)
@@ -116,7 +141,8 @@ void Database::insertRecord(DatabaseRecord &record)
     sqlite3_reset(stmt); 
 }
 
-void Database::insertRecords(juce::Array<DatabaseRecord> records) {
+void Database::insertRecords(juce::Array<DatabaseRecord> records)
+{
     // create statement to insert all members of explorer file struct
     const char *sql = "INSERT OR IGNORE INTO audio_files ("\
         "filePath,"\
@@ -148,31 +174,36 @@ void Database::insertRecords(juce::Array<DatabaseRecord> records) {
 
 void Database::scanDirectory (juce::String &directoryPath, ScanMode scanMode, ProcessMode procMode)
 {
-    double startTime = juce::Time::getMillisecondCounterHiRes();
-       
-    // filter for .wav files
+    const double startTime = juce::Time::getMillisecondCounterHiRes();   
+
     juce::File scanRoot(directoryPath);
     auto files = scanRoot.findChildFiles(juce::File::TypesOfFileToFind::findFiles, true, "*.wav");
 
-    // turn files into records
-    int numInserted = 0;
+    const int batchSize = 2048;
+    juce::Array<DatabaseRecord> records;
+    
+    records.resize(2048);
+    
     for (auto file : files)
     {
-        DatabaseRecord record = makeRecordFromFile(file);
-        insertRecord(record);
-        ++numInserted;
-
-        if (numInserted % 100 == 0)
+        if (filePathUsedAsID(file.getFullPathName()))
         {
-            DBG("TOTAL INSERTED: " << numInserted);
+            continue;
+        }
+
+        records.add(makeRecordFromFile(file));
+        if (records.size() >= batchSize)
+        {
+            insertRecords(records);
+            records.clear();
         }
     }
 
-    double endTime = juce::Time::getMillisecondCounterHiRes();
-    double elapsedTime = endTime - startTime;
+    insertRecords(records);
 
+    const double endTime = juce::Time::getMillisecondCounterHiRes();
+    const double elapsedTime = endTime - startTime;
     DBG("Elapsed Timed: " << elapsedTime << " ms");
-
     DBG("Database Size: " << getNumRecords());
 
 }
