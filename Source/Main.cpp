@@ -18,13 +18,12 @@ public:
 
     const juce::String getApplicationName() override       { return ProjectInfo::projectName; }
     const juce::String getApplicationVersion() override    { return ProjectInfo::versionString; }
-    bool moreThanOneInstanceAllowed() override             { return true; }
+    bool moreThanOneInstanceAllowed() override             { return false; }
 
     //==============================================================================
     void initialise (const juce::String& commandLine) override
     {
         // This method is where you should put your application's initialisation code..
-
         mainWindow.reset (new MainWindow (getApplicationName()));
     }
 
@@ -36,6 +35,8 @@ public:
     }
 
     //==============================================================================
+    
+    
     void systemRequestedQuit() override
     {
         // This is called when the app is being asked to quit: you can ignore this
@@ -55,7 +56,7 @@ public:
         This class implements the desktop window that contains an instance of
         our MainComponent class.
     */
-    class MainWindow    : public juce::DocumentWindow
+    class MainWindow    : public juce::DocumentWindow, public juce::KeyListener
     {
     public:
         MainWindow (juce::String name)
@@ -76,6 +77,8 @@ public:
            #endif
 
             setVisible (true);
+
+            getTopLevelComponent()->addKeyListener(this);
         }
 
         void closeButtonPressed() override
@@ -84,6 +87,16 @@ public:
             // ask the app to quit when this happens, but you can change this to do
             // whatever you need.
             JUCEApplication::getInstance()->systemRequestedQuit();
+        }
+
+        bool keyPressed (const juce::KeyPress &key, Component *originatingComponent) override
+        {
+            if (key == juce::KeyPress::escapeKey)
+            {
+                quit();
+            }
+
+            return true;
         }
 
     private:

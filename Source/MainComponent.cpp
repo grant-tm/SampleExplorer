@@ -4,6 +4,7 @@
 MainComponent::MainComponent()
 {
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    setWantsKeyboardFocus(true);
 }
 
 MainComponent::~MainComponent()
