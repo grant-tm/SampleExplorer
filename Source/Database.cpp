@@ -90,15 +90,17 @@ bool Database::filePathUsedAsID(juce::String filePath)
     char *sql = "SELECT 1 FROM audio_files WHERE filePath = ? LIMIT 1;";
     if (sqlite3_prepare_v2(sqliteDatabase, sql, -1, &stmt, nullptr) != SQLITE_OK)
     {
-        DBG("Database::filePathUsedAsID: Failed to prepare SELECT statement\n");
+        DBG("Database::filePathUsedAsID: Failed to prepare SELECT statement.");
         jassert(false);
+        return false;
     }
 
     // bind the filePath parameter to the select statment
-    if (sqlite3_bind_text16(stmt, 1, filePath.toRawUTF8(), -1, SQLITE_TRANSIENT) != SQLITE_OK)
+    if (sqlite3_bind_text(stmt, 1, filePath.toUTF8(), -1, SQLITE_TRANSIENT) != SQLITE_OK)
     {
-        DBG("Database:entry_exists: Failed to bind values.\n");
+        DBG("Database:filePathUsedAsID: Failed to bind values.");
         jassert(false);
+        return false;
     }
 
     // execute the SQL statement and return result
@@ -129,8 +131,8 @@ void Database::insertRecord(DatabaseRecord &record)
     }
 
     // bind the FileRecord data to the INSERT statement arguments
-    sqlite3_bind_text16(stmt, 1, record.filePath.toRawUTF8(), -1, SQLITE_STATIC);
-    sqlite3_bind_text16(stmt, 2, record.fileName.toRawUTF8(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 1, record.filePath.toUTF8(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, record.fileName.toUTF8(), -1, SQLITE_STATIC);
     
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         DBG("Database::insertRecord: Error inserting data.\n");
@@ -158,8 +160,8 @@ void Database::insertRecords(juce::Array<DatabaseRecord> records)
     sqlite3_exec(sqliteDatabase, "BEGIN TRANSACTION;", nullptr, nullptr, nullptr);
     for (const auto &record : records) {
 
-        sqlite3_bind_text16(stmt, 1, record.filePath.toRawUTF8(), -1, SQLITE_STATIC);
-        sqlite3_bind_text16(stmt, 2, record.fileName.toRawUTF8(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 1, record.filePath.toUTF8(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, record.fileName.toUTF8(), -1, SQLITE_STATIC);
 
         if (sqlite3_step(stmt) != SQLITE_DONE) {
             DBG("Database::insertRecords: Error inserting data.\n");
@@ -177,14 +179,13 @@ void Database::scanDirectory (juce::String &directoryPath, ScanMode scanMode, Pr
     const double startTime = juce::Time::getMillisecondCounterHiRes();   
 
     juce::File scanRoot(directoryPath);
-    auto files = scanRoot.findChildFiles(juce::File::TypesOfFileToFind::findFiles, true, "*.wav");
+    const auto files = scanRoot.findChildFiles(juce::File::TypesOfFileToFind::findFiles, true, "*.wav");
 
     const int batchSize = 2048;
     juce::Array<DatabaseRecord> records;
+    records.resize(batchSize);
     
-    records.resize(2048);
-    
-    for (auto file : files)
+    for (const auto file : files)
     {
         if (filePathUsedAsID(file.getFullPathName()))
         {
