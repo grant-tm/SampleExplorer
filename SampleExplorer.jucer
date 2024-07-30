@@ -4,6 +4,11 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="HhObj8" name="SampleExplorer">
     <GROUP id="{F06121E8-5371-56FE-05F2-A22D156873D3}" name="Source">
+      <FILE id="HfaYxZ" name="SearchBarListener.cpp" compile="1" resource="0"
+            file="Source/SearchBarListener.cpp"/>
+      <FILE id="uWCiwZ" name="SearchBarListener.h" compile="0" resource="0"
+            file="Source/SearchBarListener.h"/>
+      <FILE id="dyE4l2" name="ColorPalette.h" compile="0" resource="0" file="Source/ColorPalette.h"/>
       <FILE id="A5tqpX" name="ThreadSafeFIFO.cpp" compile="1" resource="0"
             file="Source/ThreadSafeFIFO.cpp"/>
       <FILE id="E4yRvp" name="ThreadSafeFIFO.h" compile="0" resource="0"
