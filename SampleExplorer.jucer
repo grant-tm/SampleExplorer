@@ -9,10 +9,6 @@
       <FILE id="uWCiwZ" name="SearchBarListener.h" compile="0" resource="0"
             file="Source/SearchBarListener.h"/>
       <FILE id="dyE4l2" name="ColorPalette.h" compile="0" resource="0" file="Source/ColorPalette.h"/>
-      <FILE id="A5tqpX" name="ThreadSafeFIFO.cpp" compile="1" resource="0"
-            file="Source/ThreadSafeFIFO.cpp"/>
-      <FILE id="E4yRvp" name="ThreadSafeFIFO.h" compile="0" resource="0"
-            file="Source/ThreadSafeFIFO.h"/>
       <FILE id="sKSFfm" name="Database.cpp" compile="1" resource="0" file="Source/Database.cpp"/>
       <FILE id="YIC7HC" name="Database.h" compile="0" resource="0" file="Source/Database.h"/>
       <FILE id="pAD5EN" name="SearchBar.cpp" compile="1" resource="0" file="Source/SearchBar.cpp"/>

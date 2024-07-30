@@ -2,8 +2,6 @@
 #define DATABASE_H
 
 #include <JuceHeader.h>
-
-#include "ThreadSafeFIFO.h"
 #include "sqlite3.h"
 
 //=============================================================================
