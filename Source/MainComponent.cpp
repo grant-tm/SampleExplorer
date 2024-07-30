@@ -1,7 +1,7 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent() : searchResultsListBox("ListBox"), searchResultsListBoxModel(stringArray)
+MainComponent::MainComponent() : searchResultsListBox("ListBox"), searchResultsListBoxModel(listItems)
 {
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     setWantsKeyboardFocus(true);
@@ -19,6 +19,7 @@ MainComponent::MainComponent() : searchResultsListBox("ListBox"), searchResultsL
 MainComponent::~MainComponent()
 {
     searchResultsListBox.setModel(nullptr);
+    searchResultsListBox.setLookAndFeel(nullptr);
 }
 
 //==============================================================================

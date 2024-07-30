@@ -19,20 +19,24 @@
 
 // Color Constants
 
-#define GUI_PRIMARY_ELEV0   juce::Colour(0xFF111111)
-#define GUI_PRIMARY_ELEV1   juce::Colour(0xFF222222)
-#define GUI_PRIMARY_ELEV2   juce::Colour(0xFF333333)
-#define GUI_PRIMARY_ELEV3   juce::Colour(0xFF444444)
+#ifndef MORTCOLORS
+    #define GUI_ACCENT          juce::Colour(0xFFFF0000)
 
-#define GUI_TEXT_WHITE      juce::Colour(0xFFE3E3E3)
-#define GUI_TEXT_GRAY       juce::Colour(0xFF959595)
+    #define GUI_PRIMARY_ELEV0   juce::Colour(0xFF111111)
+    #define GUI_PRIMARY_ELEV1   juce::Colour(0xFF222222)
+    #define GUI_PRIMARY_ELEV2   juce::Colour(0xFF333333)
+    #define GUI_PRIMARY_ELEV3   juce::Colour(0xFF444444)
+
+    #define GUI_TEXT_WHITE      juce::Colour(0xFFE3E3E3)
+    #define GUI_TEXT_GRAY       juce::Colour(0xFF959595)
+#endif
 
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainComponent  : public juce::Component, public juce::TextEditor::Listener
+class MainComponent  : public juce::Component, public juce::TextEditor::Listener, public juce::Timer
 {
 public:
     //=========================================================================
@@ -40,8 +44,7 @@ public:
     ~MainComponent() override;
 
     Database database;
-    juce::Array<DatabaseRecord> recordsInView;
-    juce::StringArray stringArray;
+    juce::StringArray listItems;
 
     //=========================================================================
     void paint (juce::Graphics&) override;
@@ -52,23 +55,32 @@ private:
     // Your private member variables go here...
     SearchBar searchBar;
 
-    SearchResultListBoxModel searchResultsListBoxModel {stringArray};
-    juce::ListBox searchResultsListBox;
+    SearchResultsListBoxModel searchResultsListBoxModel {listItems};
+    SearchResultsListBox searchResultsListBox;
 
     void textEditorTextChanged(juce::TextEditor &editor) override
     {
-        const juce::String query = searchBar.getText();
+        startTimer(100);
+        /*searchResultsListBoxModel.setItems(listItems);*/
+        //searchResultsListBox.updateContent();
+    }
 
-        recordsInView = database.searchByName(query);
-        stringArray.clear();
-        for (const auto &record : recordsInView)
+    void timerCallback() override
+    {
+        stopTimer();
+
+        const juce::String query = searchBar.getText();
+        juce::Array<DatabaseRecord> searchResultRecords = database.searchByName(query);
+
+        // add files not contained
+        listItems.clear();
+        for (const auto &record : searchResultRecords)
         {
-            stringArray.add(record.fileName);
+            listItems.add(record.fileName);
         }
 
-        searchResultsListBoxModel.setItems(stringArray);
+        searchResultsListBoxModel.setItems(listItems);
         searchResultsListBox.updateContent();
-        searchResultsListBox.repaint();
     }
 
     void textEditorReturnKeyPressed(juce::TextEditor &editor) override
