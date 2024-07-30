@@ -2,18 +2,10 @@
 #define SEARCH_RESULT_LIST_H
 
 #include <JuceHeader.h>
+#include "ColorPalette.h"
 
-#ifndef MORTCOLORS
-    #define GUI_ACCENT          juce::Colour(0xFFFF0000)
-
-    #define GUI_PRIMARY_ELEV0   juce::Colour(0xFF111111)
-    #define GUI_PRIMARY_ELEV1   juce::Colour(0xFF222222)
-    #define GUI_PRIMARY_ELEV2   juce::Colour(0xFF333333)
-    #define GUI_PRIMARY_ELEV3   juce::Colour(0xFF444444)
-
-    #define GUI_TEXT_WHITE      juce::Colour(0xFFE3E3E3)
-    #define GUI_TEXT_GRAY       juce::Colour(0xFF959595)
-#endif
+//=============================================================================
+// LOOK AND FEEL
 
 class SearchResultsLookAndFeel : public juce::LookAndFeel_V4
 {
