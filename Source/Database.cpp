@@ -33,19 +33,35 @@ Database::Database()
         jassert(false);
     }
 
+    // Set the encoding to UTF-8
+    const char *pragmaSql = "PRAGMA encoding = \"UTF-16\";";
+    sqlite3_stmt *pragmaStmt;
+    if (sqlite3_prepare_v2(sqliteDatabase, pragmaSql, -1, &pragmaStmt, nullptr) != SQLITE_OK)
+    {
+        DBG("Failed to prepare PRAGMA statement.");
+        jassert(false);
+    }
+    if (sqlite3_step(pragmaStmt) != SQLITE_DONE)
+    {
+        DBG("Failed to set encoding to UTF-8.");
+        jassert(false);
+    }
+
     const char *sql = "CREATE TABLE IF NOT EXISTS audio_files"\
         "("\
-        "filePath TEXT PRIMARY KEY,"\
-        "fileName TEXT NOT NULL"\
+        "filePath TEXT16 PRIMARY KEY,"\
+        "fileName TEXT16 NOT NULL"\
         ");";
 
     char *err_msg = nullptr;
-    if (sqlite3_exec(sqliteDatabase, sql, nullptr, nullptr, &err_msg) != SQLITE_OK) {
+    if (sqlite3_exec(sqliteDatabase, sql, nullptr, nullptr, &err_msg) != SQLITE_OK)
+    {
         sqlite3_free(err_msg);
         DBG("Database::Database: Error creating table.");
         jassert(false);
     }
-    else {
+    else 
+    {
         DBG("Database::Database: Table created successfully!");
     }
 }
@@ -92,7 +108,7 @@ bool Database::filePathUsedAsID(juce::String filePath) const
     }
 
     // bind the filePath parameter to the select statment
-    if (sqlite3_bind_text(stmt, 1, filePath.toUTF8(), -1, SQLITE_TRANSIENT) != SQLITE_OK)
+    if (sqlite3_bind_text16(stmt, 1, filePath.toUTF16(), -1, SQLITE_TRANSIENT) != SQLITE_OK)
     {
         DBG("Database:filePathUsedAsID: Failed to bind values.");
         jassert(false);
@@ -122,8 +138,8 @@ void Database::insertRecord(DatabaseRecord &record)
     }
 
     // bind the FileRecord data to the INSERT statement arguments
-    sqlite3_bind_text(stmt, 1, record.filePath.toUTF8(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, record.fileName.toUTF8(), -1, SQLITE_STATIC);
+    sqlite3_bind_text16(stmt, 1, record.filePath.toUTF16(), -1, SQLITE_STATIC);
+    sqlite3_bind_text16(stmt, 2, record.fileName.toUTF16(), -1, SQLITE_STATIC);
     
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         DBG("Database::insertRecord: Error inserting data.\n");
@@ -151,8 +167,8 @@ void Database::insertRecords(juce::Array<DatabaseRecord> records)
     sqlite3_exec(sqliteDatabase, "BEGIN TRANSACTION;", nullptr, nullptr, nullptr);
     for (const auto &record : records) {
 
-        sqlite3_bind_text(stmt, 1, record.filePath.toUTF8(), -1, SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, record.fileName.toUTF8(), -1, SQLITE_STATIC);
+        sqlite3_bind_text16(stmt, 1, record.filePath.toUTF16(), -1, SQLITE_STATIC);
+        sqlite3_bind_text16(stmt, 2, record.fileName.toUTF16(), -1, SQLITE_STATIC);
 
         if (sqlite3_step(stmt) != SQLITE_DONE) {
             DBG("Database::insertRecords: Error inserting data.\n");
@@ -209,4 +225,70 @@ DatabaseRecord Database::makeRecordFromFile(juce::File file)
     record.filePath = file.getFullPathName();
     record.fileName = file.getFileName();
     return record;
+}
+
+//=============================================================================
+// GET FILES LIKE NAME
+
+juce::Array<DatabaseRecord> Database::searchByName(juce::String searchQuery) {
+    
+    if (searchQuery == juce::String(""))
+    {
+        juce::Array<DatabaseRecord> records;
+        records.resize(0);
+        return records;
+    }
+    
+    // prepare sql statement
+    sqlite3_stmt *stmt;
+    const char *sql = "SELECT "\
+        "filePath, "\
+        "fileName "\
+        "FROM audio_files WHERE fileName LIKE ?;";
+
+    if (sqlite3_prepare_v2(sqliteDatabase, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        DBG("Database::searchByName: Failed to prepare sql statement.");
+        jassert(false);
+    }
+
+    // Bind the search query with wildcard characters for pattern matching
+    juce::String searchPattern("%");
+    searchPattern.append(searchQuery, 64);
+    searchPattern.append("%", 1);
+
+    int result = sqlite3_bind_text16(stmt, 1, searchPattern.toUTF16(), -1, SQLITE_STATIC);
+    if (result != SQLITE_OK) {
+        DBG("Database::searchByName: Failed to bind sql statement.");
+        jassert(false);
+    }
+
+    // Execute the statement and process the results
+    juce::Array<DatabaseRecord> records;
+    int numFound = 0;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        DatabaseRecord record;
+
+        const void *filePathRawData = sqlite3_column_text16(stmt, 0);
+        const void *fileNameRawData = sqlite3_column_text16(stmt, 1);
+
+        auto filePathUTF16 = static_cast<const juce::CharPointer_UTF16::CharType *>(filePathRawData);
+        auto fileNameUTF16 = static_cast<const juce::CharPointer_UTF16::CharType *>(fileNameRawData);
+
+        juce::String filePath = (filePathUTF16 != nullptr) ? juce::String(filePathUTF16) : "NULL_PATH";
+        juce::String fileName = (fileNameUTF16 != nullptr) ? juce::String(fileNameUTF16) : "NULL_NAME";
+
+        DBG("PATH: " << filePath);
+        DBG("NAME: " << fileName);
+
+        record.filePath = filePath;
+        record.fileName = fileName;
+
+        records.add(record);
+        ++numFound;
+    }
+
+    DBG("RESULTS FOUND: " << numFound);
+    sqlite3_finalize(stmt);
+    return records;
 }

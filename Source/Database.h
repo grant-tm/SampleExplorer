@@ -40,6 +40,8 @@ public:
     void scanDirectory (juce::String &directoryPath);
     DatabaseRecord makeRecordFromFile(juce::File);
 
+    juce::Array<DatabaseRecord> searchByName(juce::String searchQuery);
+
 private:
     sqlite3 *sqliteDatabase;
 };
