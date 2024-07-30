@@ -43,6 +43,14 @@ void SearchResultsLookAndFeel::drawScrollbar(juce::Graphics &g, juce::ScrollBar 
 //=============================================================================
 // LIST BOX MODEL
 
+SearchResultsListBoxModel::SearchResultsListBoxModel(Database &db, const juce::StringArray &items)
+    : database(db),
+    listItems(items)
+{
+    listItems.clear();
+}
+
+
 int SearchResultsListBoxModel::getNumRows()
 {
     return listItems.size();
@@ -60,10 +68,22 @@ void SearchResultsListBoxModel::paintListBoxItem(int rowNumber, juce::Graphics &
 
 void SearchResultsListBoxModel::listBoxItemClicked(int row, const juce::MouseEvent &)
 {
-    DBG("Item clicked: " << listItems[row]);
+    return;
 }
 
 void SearchResultsListBoxModel::setItems(juce::StringArray stringArray)
 {
     listItems = stringArray;
 }
+
+juce::var SearchResultsListBoxModel::getDragSourceDescription(const juce::SparseSet<int> &rowsToDescribe)
+{
+    if (rowsToDescribe.size() == 1)
+    {
+        int row = rowsToDescribe[0];
+        return listItems[row];
+    }
+
+    return {};
+}
+

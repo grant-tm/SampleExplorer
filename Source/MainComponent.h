@@ -19,7 +19,10 @@
 
 //==============================================================================
 
-class MainComponent  : public juce::Component, public SearchBarListener
+class MainComponent  : 
+    public juce::Component, 
+    public SearchBarListener,
+    public juce::DragAndDropContainer
 {
 public:
 
@@ -37,8 +40,10 @@ private:
     SearchBar searchBar;
     void searchBarTextChanged() override;
 
-    SearchResultsListBoxModel searchResultsListBoxModel {listItems};
+    SearchResultsListBoxModel searchResultsListBoxModel;
     SearchResultsListBox searchResultsListBox;
+
+    void dragOperationStarted (const juce::DragAndDropTarget::SourceDetails &) override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

@@ -1,7 +1,7 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent() : searchResultsListBox("ListBox"), searchResultsListBoxModel(listItems)
+MainComponent::MainComponent() : searchResultsListBox("ListBox"), searchResultsListBoxModel(database, listItems) 
 {
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     setWantsKeyboardFocus(true);
@@ -63,4 +63,12 @@ void MainComponent::searchBarTextChanged()
 
     searchResultsListBoxModel.setItems(listItems);
     searchResultsListBox.updateContent();
+}
+
+void MainComponent::dragOperationStarted(const juce::DragAndDropTarget::SourceDetails &source)
+{
+    auto fileName = source.description.toString();
+    juce::StringArray filesToDrag;
+    filesToDrag.add(database.getPathFromName(fileName));
+    performExternalDragDropOfFiles(filesToDrag, true);
 }
