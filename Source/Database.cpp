@@ -216,7 +216,6 @@ void Database::scanDirectory (juce::String &directoryPath)
     const double elapsedTime = endTime - startTime;
     DBG("Elapsed Timed: " << elapsedTime << " ms");
     DBG("Database Size: " << getNumRecords());
-
 }
 
 DatabaseRecord Database::makeRecordFromFile(juce::File file)
@@ -230,21 +229,20 @@ DatabaseRecord Database::makeRecordFromFile(juce::File file)
 //=============================================================================
 // GET FILES LIKE NAME
 
-juce::Array<DatabaseRecord> Database::searchByName(juce::String searchQuery) {
-    
-    if (searchQuery == juce::String(""))
-    {
-        juce::Array<DatabaseRecord> records;
-        records.resize(0);
-        return records;
-    }
-    
+juce::Array<DatabaseRecord> Database::searchByName(juce::String searchQuery)
+{
+
     // prepare sql statement
     sqlite3_stmt *stmt;
-    const char *sql = "SELECT "\
-        "filePath, "\
-        "fileName "\
-        "FROM audio_files WHERE fileName LIKE ?;";
+    const char *sql;
+    if (searchQuery.isEmpty()) {
+        // fetch all records
+        sql = "SELECT filePath, fileName FROM audio_files;";
+    }
+    else {
+        // fetch records matching the search query
+        sql = "SELECT filePath, fileName FROM audio_files WHERE fileName LIKE ?;";
+    }
 
     if (sqlite3_prepare_v2(sqliteDatabase, sql, -1, &stmt, nullptr) != SQLITE_OK) {
         DBG("Database::searchByName: Failed to prepare sql statement.");
@@ -256,10 +254,13 @@ juce::Array<DatabaseRecord> Database::searchByName(juce::String searchQuery) {
     searchPattern.append(searchQuery, 64);
     searchPattern.append("%", 1);
 
-    int result = sqlite3_bind_text16(stmt, 1, searchPattern.toUTF16(), -1, SQLITE_STATIC);
-    if (result != SQLITE_OK) {
-        DBG("Database::searchByName: Failed to bind sql statement.");
-        jassert(false);
+    if (!searchQuery.isEmpty())
+    {
+        int result = sqlite3_bind_text16(stmt, 1, searchPattern.toUTF16(), -1, SQLITE_STATIC);
+        if (result != SQLITE_OK) {
+            DBG("Database::searchByName: Failed to bind sql statement.");
+            jassert(false);
+        }
     }
 
     // Execute the statement and process the results
@@ -277,9 +278,6 @@ juce::Array<DatabaseRecord> Database::searchByName(juce::String searchQuery) {
 
         juce::String filePath = (filePathUTF16 != nullptr) ? juce::String(filePathUTF16) : "NULL_PATH";
         juce::String fileName = (fileNameUTF16 != nullptr) ? juce::String(fileNameUTF16) : "NULL_NAME";
-
-        DBG("PATH: " << filePath);
-        DBG("NAME: " << fileName);
 
         record.filePath = filePath;
         record.fileName = fileName;
