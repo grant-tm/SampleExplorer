@@ -46,3 +46,21 @@ void MainComponent::resized()
     searchResultsBounds.removeFromBottom(7);
     searchResultsListBox.setBounds(searchResultsBounds);
 }
+
+
+//==============================================================================
+void MainComponent::searchBarTextChanged()
+{
+    const juce::String query = searchBar.getText();
+    juce::Array<DatabaseRecord> searchResultRecords = database.searchByName(query);
+
+    // add files not contained
+    listItems.clear();
+    for (const auto &record : searchResultRecords)
+    {
+        listItems.add(record.fileName);
+    }
+
+    searchResultsListBoxModel.setItems(listItems);
+    searchResultsListBox.updateContent();
+}

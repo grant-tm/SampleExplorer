@@ -5,6 +5,7 @@
 #include "ColorPalette.h"
 #include "Database.h"
 #include "SearchBar.h"
+#include "SearchBarListener.h"
 #include "SearchResultList.h"
 
 #define DEFAULT_WIDTH   360
@@ -17,71 +18,27 @@
 #define MAXIMUM_HEIGHT  int(DEFAULT_HEIGHT * 1.25)
 
 //==============================================================================
-/*
-    This component lives inside our window, and this is where you should put all
-    your controls and content.
-*/
-class MainComponent  : public juce::Component, public juce::TextEditor::Listener, public juce::Timer
+
+class MainComponent  : public juce::Component, public SearchBarListener
 {
 public:
-    //=========================================================================
+
     MainComponent();
     ~MainComponent() override;
 
     Database database;
     juce::StringArray listItems;
 
-    //=========================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
 
 private:
-    //=========================================================================
-    // Your private member variables go here...
+    
     SearchBar searchBar;
+    void searchBarTextChanged() override;
 
     SearchResultsListBoxModel searchResultsListBoxModel {listItems};
     SearchResultsListBox searchResultsListBox;
-
-    void textEditorTextChanged(juce::TextEditor &editor) override
-    {
-        startTimer(100);
-        /*searchResultsListBoxModel.setItems(listItems);*/
-        //searchResultsListBox.updateContent();
-    }
-
-    void timerCallback() override
-    {
-        stopTimer();
-
-        const juce::String query = searchBar.getText();
-        juce::Array<DatabaseRecord> searchResultRecords = database.searchByName(query);
-
-        // add files not contained
-        listItems.clear();
-        for (const auto &record : searchResultRecords)
-        {
-            listItems.add(record.fileName);
-        }
-
-        searchResultsListBoxModel.setItems(listItems);
-        searchResultsListBox.updateContent();
-    }
-
-    void textEditorReturnKeyPressed(juce::TextEditor &editor) override
-    {
-        return; // does nothing... or rescan?
-    }
-
-    void textEditorEscapeKeyPressed(juce::TextEditor &editor) override
-    {
-        return;
-    }
-
-    void textEditorFocusLost(juce::TextEditor &editor) override
-    {
-        return;
-    }
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
