@@ -31,6 +31,7 @@ public:
 
     int getNumRecords() const;
     bool filePathUsedAsID(juce::String filePath) const;
+    juce::String getPathFromName(juce::String fileName) const;
 
     void insertRecord(DatabaseRecord &);
     void insertRecords(juce::Array<DatabaseRecord>);

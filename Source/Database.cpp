@@ -290,3 +290,33 @@ juce::Array<DatabaseRecord> Database::searchByName(juce::String searchQuery)
     sqlite3_finalize(stmt);
     return records;
 }
+
+//=============================================================================
+
+juce::String Database::getPathFromName(juce::String fileName) const
+{
+    // prepare sql statement
+    const char *sql = "SELECT filePath FROM audio_files WHERE fileName = ? ";
+    sqlite3_stmt *stmt;
+    if (sqlite3_prepare_v2(sqliteDatabase, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        DBG("Database::getPathFromName: Failed to prepare sql statement.");
+        jassert(false);
+    }
+    if (sqlite3_bind_text16(stmt, 1, fileName.toUTF16(), -1, SQLITE_STATIC) != SQLITE_OK)
+    {
+        DBG("Database::searchByName: Failed to bind sql statement.");
+        jassert(false);
+    }
+
+    juce::String returnPath("");
+
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        const void *filePathRawData = sqlite3_column_text16(stmt, 0);
+        auto filePathUTF16 = static_cast<const juce::CharPointer_UTF16::CharType *>(filePathRawData);
+        juce::String filePath = (filePathUTF16 != nullptr) ? juce::String(filePathUTF16) : "NULL_PATH";
+        returnPath = filePath;
+    }
+    sqlite3_finalize(stmt);
+    return returnPath;
+}
