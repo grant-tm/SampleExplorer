@@ -2,7 +2,9 @@
 #define MAIN_COMPONENT_H
 
 #include <JuceHeader.h>
+#include "Database.h"
 #include "SearchBar.h"
+#include "SearchResultList.h"
 
 // Size Constants
 
@@ -30,22 +32,60 @@
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainComponent  : public juce::Component
+class MainComponent  : public juce::Component, public juce::TextEditor::Listener
 {
 public:
-    //==============================================================================
+    //=========================================================================
     MainComponent();
     ~MainComponent() override;
 
-    //==============================================================================
+    Database database;
+    juce::Array<DatabaseRecord> recordsInView;
+    juce::StringArray stringArray;
+
+    //=========================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
 
 private:
-    //==============================================================================
+    //=========================================================================
     // Your private member variables go here...
-
     SearchBar searchBar;
+
+    SearchResultListBoxModel searchResultsListBoxModel {stringArray};
+    juce::ListBox searchResultsListBox;
+
+    void textEditorTextChanged(juce::TextEditor &editor) override
+    {
+        const juce::String query = searchBar.getText();
+
+        recordsInView = database.searchByName(query);
+        stringArray.clear();
+        for (const auto &record : recordsInView)
+        {
+            stringArray.add(record.fileName);
+        }
+
+        searchResultsListBoxModel.setItems(stringArray);
+        searchResultsListBox.updateContent();
+        searchResultsListBox.repaint();
+    }
+
+    void textEditorReturnKeyPressed(juce::TextEditor &editor) override
+    {
+        return; // does nothing... or rescan?
+    }
+
+    void textEditorEscapeKeyPressed(juce::TextEditor &editor) override
+    {
+        return;
+    }
+
+    void textEditorFocusLost(juce::TextEditor &editor) override
+    {
+        return;
+    }
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
 
