@@ -1,15 +1,24 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent()
+MainComponent::MainComponent() : searchResultsListBox("ListBox"), searchResultsListBoxModel(stringArray)
 {
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     setWantsKeyboardFocus(true);
+
+    juce::String directory("D:/Samples/");
+    database.scanDirectory(directory);
+
+    addAndMakeVisible(searchResultsListBox);
+    searchResultsListBox.setModel(&searchResultsListBoxModel);
+
+    searchBar.addListener(this);
     addAndMakeVisible(searchBar);
 }
 
 MainComponent::~MainComponent()
 {
+    searchResultsListBox.setModel(nullptr);
 }
 
 //==============================================================================
@@ -28,4 +37,11 @@ void MainComponent::resized()
     searchBarBounds.removeFromRight(7);
     searchBarBounds = searchBarBounds.removeFromTop(28);
     searchBar.setBounds(searchBarBounds);
+
+    auto searchResultsBounds = bounds;
+    searchResultsBounds.removeFromTop(28 + 7 + 7);
+    searchResultsBounds.removeFromLeft(7);
+    searchResultsBounds.removeFromRight(7);
+    searchResultsBounds.removeFromBottom(7);
+    searchResultsListBox.setBounds(searchResultsBounds);
 }
