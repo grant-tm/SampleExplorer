@@ -29,7 +29,8 @@ SearchBar::SearchBar() : juce::TextEditor()
     setColour(juce::TextEditor::ColourIds::highlightColourId, juce::Colours::black);
 
     // font style and justification
-    juce::Font font = juce::Font();
+    juce::FontOptions defaultOptions;
+    juce::Font font = juce::Font(defaultOptions);
     font.setSizeAndStyle(18, font.getDefaultMonospacedFontName(), 1.f, 0.f);
     setFont(font);
     setJustification(juce::Justification::centredLeft);
