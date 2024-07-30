@@ -14,6 +14,7 @@ public:
 
     void initialise (const juce::String& commandLine) override
     {
+        juce::ignoreUnused(commandLine);
         mainWindow.reset (new MainWindow (getApplicationName()));
     }
 
@@ -27,7 +28,9 @@ public:
         quit();
     }
 
-    void anotherInstanceStarted (const juce::String& commandLine) override {}
+    void anotherInstanceStarted (const juce::String& commandLine) override {
+        juce::ignoreUnused(commandLine);
+    }
 
     //==============================================================================
     /*
@@ -64,6 +67,7 @@ public:
 
         bool keyPressed (const juce::KeyPress &key, Component *originatingComponent) override
         {
+            juce::ignoreUnused(originatingComponent);
             if (key == juce::KeyPress::escapeKey)
             {
                 quit();
