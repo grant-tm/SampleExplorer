@@ -2,8 +2,10 @@
 #define SEARCH_RESULT_LIST_H
 
 #include <JuceHeader.h>
-#include "Database.h"
 #include "ColorPalette.h"
+
+#include "Database.h"
+#include "SamplePlayer.h"
 
 //=============================================================================
 // LOOK AND FEEL
@@ -27,8 +29,6 @@ public:
     SearchResultsListBox(juce::String name);
     ~SearchResultsListBox() override = default;
 
-    juce::String getDraggedItem();
-
 private:
     SearchResultsLookAndFeel lookAndFeel;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SearchResultsListBox)
@@ -49,12 +49,19 @@ public:
 
     void listBoxItemClicked(int row, const juce::MouseEvent &) override;
     void setItems(juce::StringArray stringArray);
-    const juce::String getLastItemClicked() const;
+
+    // This method is called whenever the selected rows change
+    void selectedRowsChanged(int lastRowSelected) override;
+
+    void playSampleFromRow(int row);
 
 private:
     Database &database;
+
     juce::StringArray listItems;
-    juce::String lastItemClicked;
+
+    SamplePlayer samplePlayer;
+    
 };
 
 #endif SEARCH_RESULT_LIST_H

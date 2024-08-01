@@ -68,7 +68,7 @@ void SearchResultsListBoxModel::paintListBoxItem(int rowNumber, juce::Graphics &
 
 void SearchResultsListBoxModel::listBoxItemClicked(int row, const juce::MouseEvent &)
 {
-    return;
+    juce::ignoreUnused(row);
 }
 
 void SearchResultsListBoxModel::setItems(juce::StringArray stringArray)
@@ -87,3 +87,18 @@ juce::var SearchResultsListBoxModel::getDragSourceDescription(const juce::Sparse
     return {};
 }
 
+void SearchResultsListBoxModel::selectedRowsChanged(int lastRowSelected)
+{
+    playSampleFromRow(lastRowSelected);
+}
+
+void SearchResultsListBoxModel::playSampleFromRow(int row)
+{
+    juce::String filePath = database.getPathFromName(listItems[row]);
+    juce::File file(filePath);
+
+    if (file.existsAsFile())
+    {
+        samplePlayer.playSample(file);
+    }
+}
