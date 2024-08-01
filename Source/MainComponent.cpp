@@ -13,6 +13,7 @@ MainComponent::MainComponent() : searchResultsListBox("ListBox"), searchResultsL
     searchResultsListBox.setModel(&searchResultsListBoxModel);
 
     searchBar.addListener(this);
+    searchBarTextChanged();
     addAndMakeVisible(searchBar);
 }
 
@@ -60,6 +61,7 @@ void MainComponent::searchBarTextChanged()
     {
         listItems.add(record.fileName);
     }
+    //listItems.sortNatural();
 
     searchResultsListBoxModel.setItems(listItems);
     searchResultsListBox.updateContent();
