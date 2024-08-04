@@ -4,22 +4,33 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="HhObj8" name="SampleExplorer">
     <GROUP id="{F06121E8-5371-56FE-05F2-A22D156873D3}" name="Source">
-      <FILE id="Dyie6x" name="SamplePlayer.cpp" compile="1" resource="0"
-            file="Source/SamplePlayer.cpp"/>
-      <FILE id="OJDNOp" name="SamplePlayer.h" compile="0" resource="0" file="Source/SamplePlayer.h"/>
-      <FILE id="HfaYxZ" name="SearchBarListener.cpp" compile="1" resource="0"
-            file="Source/SearchBarListener.cpp"/>
-      <FILE id="uWCiwZ" name="SearchBarListener.h" compile="0" resource="0"
-            file="Source/SearchBarListener.h"/>
-      <FILE id="dyE4l2" name="ColorPalette.h" compile="0" resource="0" file="Source/ColorPalette.h"/>
-      <FILE id="sKSFfm" name="Database.cpp" compile="1" resource="0" file="Source/Database.cpp"/>
-      <FILE id="YIC7HC" name="Database.h" compile="0" resource="0" file="Source/Database.h"/>
-      <FILE id="pAD5EN" name="SearchBar.cpp" compile="1" resource="0" file="Source/SearchBar.cpp"/>
-      <FILE id="SkZQe6" name="SearchBar.h" compile="0" resource="0" file="Source/SearchBar.h"/>
-      <FILE id="uCYirK" name="SearchResultList.cpp" compile="1" resource="0"
-            file="Source/SearchResultList.cpp"/>
-      <FILE id="ciPNUg" name="SearchResultList.h" compile="0" resource="0"
-            file="Source/SearchResultList.h"/>
+      <GROUP id="{500DC793-9E14-3A75-64CE-308A6BFBF745}" name="Audio File IO">
+        <FILE id="dyE4l2" name="ColorPalette.h" compile="0" resource="0" file="Source/ColorPalette.h"/>
+        <FILE id="r3HEsE" name="ByteReader.cpp" compile="1" resource="0" file="Source/ByteReader.cpp"/>
+        <FILE id="tpQT1s" name="ByteReader.h" compile="0" resource="0" file="Source/ByteReader.h"/>
+        <FILE id="Dyie6x" name="SamplePlayer.cpp" compile="1" resource="0"
+              file="Source/SamplePlayer.cpp"/>
+        <FILE id="OJDNOp" name="SamplePlayer.h" compile="0" resource="0" file="Source/SamplePlayer.h"/>
+        <FILE id="pjz6f0" name="WavFileReader.cpp" compile="1" resource="0"
+              file="Source/WavFileReader.cpp"/>
+        <FILE id="Ojy3fj" name="WavFileReader.h" compile="0" resource="0" file="Source/WavFileReader.h"/>
+      </GROUP>
+      <GROUP id="{E8C26DDE-18F4-7B41-C17F-9E284307CD90}" name="GUI Components">
+        <FILE id="HfaYxZ" name="SearchBarListener.cpp" compile="1" resource="0"
+              file="Source/SearchBarListener.cpp"/>
+        <FILE id="pAD5EN" name="SearchBar.cpp" compile="1" resource="0" file="Source/SearchBar.cpp"/>
+        <FILE id="SkZQe6" name="SearchBar.h" compile="0" resource="0" file="Source/SearchBar.h"/>
+        <FILE id="uCYirK" name="SearchResultList.cpp" compile="1" resource="0"
+              file="Source/SearchResultList.cpp"/>
+        <FILE id="ciPNUg" name="SearchResultList.h" compile="0" resource="0"
+              file="Source/SearchResultList.h"/>
+        <FILE id="uWCiwZ" name="SearchBarListener.h" compile="0" resource="0"
+              file="Source/SearchBarListener.h"/>
+      </GROUP>
+      <GROUP id="{6EA83F6A-3492-829E-A501-F9F4B28B321C}" name="Database">
+        <FILE id="sKSFfm" name="Database.cpp" compile="1" resource="0" file="Source/Database.cpp"/>
+        <FILE id="YIC7HC" name="Database.h" compile="0" resource="0" file="Source/Database.h"/>
+      </GROUP>
       <FILE id="QRVqki" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="ahTUNK" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="Ugr0P1" name="MainComponent.cpp" compile="1" resource="0"
