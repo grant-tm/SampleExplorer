@@ -3,7 +3,7 @@
 
 #include <JuceHeader.h>
 #include "sqlite3.h"
-#include "WavFileReader.h"
+#include "../Audio IO/WavFileReader.h"
 
 //=============================================================================
 // Record

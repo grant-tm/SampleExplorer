@@ -6,7 +6,7 @@ MainComponent::MainComponent() : searchResultsListBox("ListBox"), searchResultsL
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     setWantsKeyboardFocus(true);
 
-    juce::String directory("D:/Samples/");
+    juce::String directory("D:/Samples/Instruments");
     database.scanDirectory(directory);
 
     addAndMakeVisible(searchResultsListBox);

@@ -1,6 +1,6 @@
 #include <JuceHeader.h>
 #include "MainComponent.h"
-#include "Database.h"
+#include "Database/Database.h"
 
 class SampleExplorerApplication  : public juce::JUCEApplication
 {

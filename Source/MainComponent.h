@@ -2,11 +2,13 @@
 #define MAIN_COMPONENT_H
 
 #include <JuceHeader.h>
-#include "ColorPalette.h"
-#include "Database.h"
-#include "SearchBar.h"
-#include "SearchBarListener.h"
-#include "SearchResultList.h"
+
+#include "Database/Database.h"
+
+#include "GUI Components/ColorPalette.h"
+#include "GUI Components/SearchBar.h"
+#include "GUI Components/SearchBarListener.h"
+#include "GUI Components/SearchResultList.h"
 
 #define DEFAULT_WIDTH   360
 #define DEFAULT_HEIGHT  490

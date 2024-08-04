@@ -4,7 +4,7 @@
 #include <JuceHeader.h>
 #include "ColorPalette.h"
 
-#include "Database.h"
+#include "../Database/Database.h"
 #include "SamplePlayer.h"
 
 //=============================================================================
