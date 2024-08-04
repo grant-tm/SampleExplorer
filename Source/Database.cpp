@@ -141,34 +141,81 @@ void Database::insertRecords(juce::Array<DatabaseRecord> records)
 
 void Database::scanDirectory (juce::String &directoryPath)
 {
-    const double startTime = juce::Time::getMillisecondCounterHiRes();   
+    const double scanStartTime = juce::Time::getMillisecondCounterHiRes();   
 
     juce::File scanRoot(directoryPath);
     const auto files = scanRoot.findChildFiles(juce::File::TypesOfFileToFind::findFiles, true, "*.wav");
 
-    const int batchSize = 2048;
+    const int batchSize = 1000;
     juce::Array<DatabaseRecord> records;
     records.resize(batchSize);
-    
-    for (const auto file : files)
+
+    int numSeen = 0;
+    int progressTick = files.size() / 25;
+    int numAdded = 0;
+    int numInserted = 0;
+    int numRead = 0;
+    int totalReadTime = 0;
+    for (const auto &file : files)
     {
+        ++numSeen;
+
+        if (numSeen % progressTick == 0)
+        {
+            DBG("Scan Progress: " << (100 * numSeen / files.size()) + 1 << "%");
+        }
+
+        int readStartTime = juce::Time::getMillisecondCounter();
+        ++numRead;
+        WavFileReader reader(file.getFullPathName());
+        reader.parse();
+        int readEndTime = juce::Time::getMillisecondCounter();
+        totalReadTime += (readEndTime - readStartTime);
+
         if (filePathUsedAsID(file.getFullPathName()))
         {
             continue;
         }
 
         records.add(makeRecordFromFile(file));
-        if (records.size() >= batchSize)
+        numAdded++;
+        if (numAdded >= batchSize)
         {
             insertRecords(records);
             records.clear();
+
+            numAdded = 0;
+            numInserted += batchSize;
         }
     }
+    numInserted += records.size();
     insertRecords(records);
 
-    const double endTime = juce::Time::getMillisecondCounterHiRes();
-    const double elapsedTime = endTime - startTime;
-    DBG("Elapsed Timed: " << elapsedTime << " ms");
+    // ONLY TELEMETRY BELOW
+
+    const double scanEndTime = juce::Time::getMillisecondCounterHiRes();
+    const double totalScanTime = scanEndTime - scanStartTime;
+
+    float scanTimeSeconds = totalScanTime / 1000.f;
+    float readTimeSeconds = totalReadTime / 1000.f;
+
+    DBG("=========================================================");
+    DBG("SCAN TELEMETRY");
+    DBG("=========================================================");
+    DBG("= ");
+    DBG("= SCAN OVERVIEW");
+    DBG("= Duration      -- " << scanTimeSeconds << " seconds");
+    DBG("= Performance   -- " << files.size() / scanTimeSeconds << " files / second");
+    DBG("= Files Scanned -- " << files.size());
+    DBG("= Files Updated -- " << numInserted);
+    DBG("= ");
+    DBG("= READ PERFORMANCE");
+    DBG("= Files Analyzed       -- " << numRead);
+    DBG("= Analysis Duration    -- " << readTimeSeconds << " seconds");
+    DBG("= Analysis Performance -- " << (float(numRead) / readTimeSeconds) << " files / second");
+    DBG("= ");
+    DBG("=========================================================");
+
 }
 
 DatabaseRecord Database::makeRecordFromFile(juce::File file)
@@ -233,8 +280,6 @@ juce::Array<DatabaseRecord> Database::searchByName(juce::String searchQuery)
     return records;
 }
 
-//=============================================================================
-
 juce::String Database::getPathFromName(juce::String fileName) const
 {
     // prepare sql statement
@@ -256,3 +301,5 @@ juce::String Database::getPathFromName(juce::String fileName) const
     sqlite3_finalize(stmt);
     return returnPath;
 }
+
+//=============================================================================
