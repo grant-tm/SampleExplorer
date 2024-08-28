@@ -19,12 +19,15 @@
 #define MAXIMUM_WIDTH   int(DEFAULT_WIDTH * 1.5)
 #define MAXIMUM_HEIGHT  int(DEFAULT_HEIGHT * 1.25)
 
+#define FILTER_PANE_WIDTH int(MINIMUM_WIDTH)
+
 //==============================================================================
 
 class MainComponent  : 
     public juce::Component, 
     public SearchBarListener,
-    public juce::DragAndDropContainer
+    public juce::DragAndDropContainer,
+    public juce::Button::Listener
 {
 public:
 
@@ -37,13 +40,26 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    class Listener
+    {
+    public:
+        virtual ~Listener() {}
+        virtual void updateWindowResizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) = 0;
+    };
+    void setListener(Listener *);
+
 private:
-    
+
+    Listener *listener = nullptr;
+
     SearchBar searchBar;
     void searchBarTextChanged() override;
 
     SearchResultsListBoxModel searchResultsListBoxModel;
     SearchResultsListBox searchResultsListBox;
+
+    juce::ToggleButton filterPaneToggleButton = juce::ToggleButton("Filter Pane Toggle");
+    void buttonClicked(juce::Button *button) override;
 
     void dragOperationStarted (const juce::DragAndDropTarget::SourceDetails &) override;
 
