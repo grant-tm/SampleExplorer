@@ -160,7 +160,7 @@ void Database::scanDirectory (juce::String &directoryPath)
     {
         if (++numSeen % progressTick == 0)
             DBG("Scan Progress: " << (100 * numSeen / files.size()) + 1 << "%");
-        if (file.existsAsFile())
+        if (file.existsAsFile() && !filePathUsedAsID(file.getFullPathName()))
         {
             records.add(makeRecordFromFile(file));
             ++numInserted;
