@@ -240,6 +240,29 @@ const unsigned char *ByteReader::getByteLoc (size_t index)
 //=============================================================================
 // FAST SAMPLE READS
 
+void ByteReader::readUints16SIMD(const unsigned char *buf, uint32_t *output, int numSamples)
+{
+    int sampleIndex = 0;
+    for (sampleIndex; sampleIndex <= (numSamples - 8); sampleIndex += 8)
+    {
+        __m128i data = _mm_loadu_si128(reinterpret_cast<const __m128i *>(buf + sampleIndex * 3));
+        output[sampleIndex + 0] = _mm_extract_epi8(data, 0);
+        output[sampleIndex + 1] = _mm_extract_epi8(data, 1);
+        output[sampleIndex + 2] = _mm_extract_epi8(data, 2);
+        output[sampleIndex + 3] = _mm_extract_epi8(data, 3);
+        output[sampleIndex + 4] = _mm_extract_epi8(data, 4);
+        output[sampleIndex + 5] = _mm_extract_epi8(data, 5);
+        output[sampleIndex + 6] = _mm_extract_epi8(data, 6);
+        output[sampleIndex + 7] = _mm_extract_epi8(data, 7);
+    }
+    for (sampleIndex; sampleIndex < numSamples; sampleIndex += 1)
+    {
+        const uint32_t highByte = buf[sampleIndex] << 8;
+        const uint32_t lowByte = buf[sampleIndex+1];
+        const uint32_t sample = 0 | buf[sampleIndex] << 8 | buf[sampleIndex];
+    }
+}
+
 void ByteReader::readUints24(const unsigned char *buf, uint32_t *output, int numSamples)
 {
     const int bitDepth = 24;
@@ -296,22 +319,22 @@ void ByteReader::readUints24SIMD(const unsigned char *buf, uint32_t *output, int
         output[sampleIndex+4] = q3 & 0x00FFFFFF;
     }
 
-    // read remaining samples one by one
+    // read remaining samples
     alignas(16) uint32_t unpacked[4];
-    for (sampleIndex; sampleIndex < numSamples; sampleIndex += 1)
-    {
+    //for (sampleIndex; sampleIndex < numSamples; sampleIndex += 1)
+    //{
         for (int j = 0; j < 4 && (sampleIndex + j) < numSamples; ++j)
         {
             const uint8_t *addr = buf + (sampleIndex + j) * 3;
-            unpacked[j] = (static_cast<int32_t>(addr[0]) << 8)
+            output[sampleIndex + j] = (static_cast<int32_t>(addr[0]) << 8)
                 | (static_cast<uint32_t>(addr[1]) << 16)
                 | (static_cast<uint32_t>(addr[2]) << 24);
-            unpacked[j] >>= 8;
+            output[sampleIndex + j] >>= 8;
         }
-        for (int j = 0; j < 4 && (sampleIndex + j) < numSamples; ++j)
+        /*for (int j = 0; j < 4 && (sampleIndex + j) < numSamples; ++j)
         {
             output[sampleIndex + j] = unpacked[j];
-        }
-    }
+        }*/
+    //}
     
 }

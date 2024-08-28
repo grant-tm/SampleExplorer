@@ -34,6 +34,7 @@ public:
 	bool readCompare (const char *);
 
 	// fast sample reads
+	void readUints16SIMD(const unsigned char *buf, uint32_t *output, int numSamples);
 	void readUints24(const unsigned char *buf, uint32_t *output, int numSamples);
 	void readUints24SIMD(const unsigned char *buf, uint32_t *output, int numSamples);
 

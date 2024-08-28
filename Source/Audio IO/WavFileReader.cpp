@@ -7,7 +7,6 @@ ParseResult WavFileReader::parse (void)
     if (!isOpen())
     {
         DBG("FILE IS NOTE OPEN");
-        //jassert(false);
         return PARSE_ERROR;
     }
     gotoByte(0);
@@ -16,7 +15,6 @@ ParseResult WavFileReader::parse (void)
     if (!readCompare("RIFF"))
     {
         DBG("No RIFF header in " << filePath);
-        //jassert(false);
         return PARSE_ERROR;
     }
 
@@ -26,7 +24,6 @@ ParseResult WavFileReader::parse (void)
     if (!readCompare("WAVE"))
     {
         DBG("No WAVE desc header in " << filePath);
-        //jassert(false);
         return PARSE_ERROR;
     }
 
@@ -47,7 +44,6 @@ ParseResult WavFileReader::parse (void)
     if (attempts >= maxAttempts)
     {
         DBG("Failed to locate format chunk in " << filePath);
-        //jassert(false);
         return PARSE_ERROR;
     }
 
@@ -58,6 +54,7 @@ ParseResult WavFileReader::parse (void)
     const int dataRate = readInt(4);
     const int blockAlign = readInt(2);
     const int bitDepth = readInt(2);
+    
     if (chunkSize > 16)
         seekBytes(chunkSize - 16);
 
@@ -77,7 +74,6 @@ ParseResult WavFileReader::parse (void)
     if (attempts >= maxAttempts)
     {
         DBG("Failed to locate data chunk in " << filePath);
-        //jassert(false);
         return PARSE_ERROR;
     }
 
@@ -87,7 +83,6 @@ ParseResult WavFileReader::parse (void)
     auto startLocation = getLoc();
 
     uint32_t *samples = new uint32_t[numSamples];
-
     switch (bitDepth)
     {
         case 8:
