@@ -1,4 +1,9 @@
 #include "Database.h"
+#include <fstream>
+
+#define START_TIMER float(juce::Time::getMillisecondCounter())
+#define STOP_TIMER_AND_GET_DURATION_MILLISECONDS(startTime) float(juce::Time::getMillisecondCounter() - startTime)
+#define STOP_TIMER_AND_GET_DURATION_SECONDS(startTime) float((juce::Time::getMillisecondCounter() - startTime) / 1000.f)
 
 DatabaseRecord::DatabaseRecord()
 {
@@ -141,78 +146,110 @@ void Database::insertRecords(juce::Array<DatabaseRecord> records)
 
 void Database::scanDirectory (juce::String &directoryPath)
 {
-    const double scanStartTime = juce::Time::getMillisecondCounterHiRes();   
+    const auto scanStartTime = START_TIMER;   
 
     juce::File scanRoot(directoryPath);
     const auto files = scanRoot.findChildFiles(juce::File::TypesOfFileToFind::findFiles, true, "*.wav");
 
-    const int batchSize = 1000;
+    // get minimally required info and store in DB
     juce::Array<DatabaseRecord> records;
-    records.resize(batchSize);
-
     int numSeen = 0;
-    int progressTick = files.size() / 25;
-    int numAdded = 0;
+    int progressTick = files.size() / 4;
     int numInserted = 0;
-    int numRead = 0;
-    int totalReadTime = 0;
     for (const auto &file : files)
     {
-        ++numSeen;
-
-        if (numSeen % progressTick == 0)
-        {
+        if (++numSeen % progressTick == 0)
             DBG("Scan Progress: " << (100 * numSeen / files.size()) + 1 << "%");
-        }
-
-        int readStartTime = juce::Time::getMillisecondCounter();
-        ++numRead;
-        WavFileReader reader(file.getFullPathName());
-        reader.parse();
-        int readEndTime = juce::Time::getMillisecondCounter();
-        totalReadTime += (readEndTime - readStartTime);
-
-        if (filePathUsedAsID(file.getFullPathName()))
+        if (file.existsAsFile())
         {
-            continue;
-        }
-
-        records.add(makeRecordFromFile(file));
-        numAdded++;
-        if (numAdded >= batchSize)
-        {
-            insertRecords(records);
-            records.clear();
-
-            numAdded = 0;
-            numInserted += batchSize;
+            records.add(makeRecordFromFile(file));
+            ++numInserted;
         }
     }
-    numInserted += records.size();
     insertRecords(records);
 
+    int numPreloaded = 0;
+    float preloadDuration = 0;
+
+    int numRead = 0;
+    float readDuration = 0;
+
+    int recordIndex = 0;
+    int batchSize = 128;
+
+    progressTick = numInserted / 100;
+
+    while (recordIndex < numInserted)
+    {
+        // construct batch array
+        int numRecords = juce::jmin(batchSize, numInserted - recordIndex);
+        
+        juce::Array<DatabaseRecord> recordBatch;
+        //recordBatch.resize(numRecords);
+        int recordBatchSize = 0;
+        for (int i = recordIndex; i < (recordIndex + numRecords); i++)
+        {
+            ++recordBatchSize;
+            DatabaseRecord newRecord;
+            newRecord.filePath = (records[recordIndex + i]).filePath;
+            newRecord.fileName = (records[recordIndex + i]).fileName;
+            recordBatch.add(newRecord);
+        }
+
+        // preload files in cache by performing cheap read
+        // --> improves scan performance 5x
+        const auto preloadStartTime = START_TIMER;
+        for (const auto &record : recordBatch) {
+            ++numPreloaded;
+            const auto filepath = record.filePath.toStdString();
+            std::ifstream file(filepath, std::ios::binary);
+            if (file) {
+                char buffer[4096];
+                file.read(buffer, sizeof(buffer));
+            }
+        }
+        preloadDuration += STOP_TIMER_AND_GET_DURATION_MILLISECONDS(preloadStartTime);
+
+        // expensive read
+        const auto readStartTime = START_TIMER;
+        for (const auto &record : recordBatch)
+        {
+            juce::File file(record.filePath);
+            if (file.existsAsFile())
+            {
+                ++numRead;
+                if (numRead % progressTick == 0)
+                    DBG("Analysis Progress: " << (200 * numRead / numInserted) + 1 << "%");
+                //WavFileReader reader(file.getFullPathName());
+                //reader.parse();
+            }
+        }
+        readDuration += STOP_TIMER_AND_GET_DURATION_SECONDS(readStartTime);
+        recordIndex += numRecords;
+    }
+
     // ONLY TELEMETRY BELOW
-
-    const double scanEndTime = juce::Time::getMillisecondCounterHiRes();
-    const double totalScanTime = scanEndTime - scanStartTime;
-
-    float scanTimeSeconds = totalScanTime / 1000.f;
-    float readTimeSeconds = totalReadTime / 1000.f;
+    const auto scanDuration = STOP_TIMER_AND_GET_DURATION_SECONDS(scanStartTime);
 
     DBG("=========================================================");
     DBG("SCAN TELEMETRY");
     DBG("=========================================================");
     DBG("= ");
     DBG("= SCAN OVERVIEW");
-    DBG("= Duration      -- " << scanTimeSeconds << " seconds");
-    DBG("= Performance   -- " << files.size() / scanTimeSeconds << " files / second");
-    DBG("= Files Scanned -- " << files.size());
-    DBG("= Files Updated -- " << numInserted);
+    DBG("= Files Found    -- " << files.size());
+    DBG("= Files Scanned  -- " << numInserted);
+    DBG("= Duration       -- " << scanDuration << " seconds");
+    DBG("= Performance    -- " << files.size() / scanDuration << " files / second");
+    DBG("= ");
+    DBG("= CACHE PRELOADING");
+    DBG("= Files Loaded   -- " << numPreloaded);
+    DBG("= Duration       -- " << preloadDuration << " ms");
+    DBG("= Performance    -- " << 1000 * numPreloaded / preloadDuration << " files / second");
     DBG("= ");
     DBG("= READ PERFORMANCE");
-    DBG("= Files Analyzed       -- " << numRead);
-    DBG("= Analysis Duration    -- " << readTimeSeconds << " seconds");
-    DBG("= Analysis Performance -- " << (float(numRead) / readTimeSeconds) << " files / second");
+    DBG("= Files Analyzed -- " << numRead);
+    DBG("= Duration       -- " << readDuration << " seconds");
+    DBG("= Performance    -- " << (numRead / readDuration) << " files / second");
     DBG("= ");
     DBG("=========================================================");
 
