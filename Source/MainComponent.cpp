@@ -58,7 +58,8 @@ void MainComponent::resized()
     searchBarBounds.removeFromRight(7);
     searchBarBounds = searchBarBounds.removeFromTop(28);
 
-    filterPaneToggleButton.setBounds(searchBarBounds.removeFromRight(28));
+    filterPaneToggleButton.setBounds(searchBarBounds.removeFromRight(21));
+    searchBarBounds.removeFromRight(4);
     searchBar.setBounds(searchBarBounds);
 
     auto searchResultsBounds = bounds;

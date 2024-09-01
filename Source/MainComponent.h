@@ -19,7 +19,7 @@
 #define MAXIMUM_WIDTH   int(DEFAULT_WIDTH * 1.5)
 #define MAXIMUM_HEIGHT  int(DEFAULT_HEIGHT * 1.25)
 
-#define FILTER_PANE_WIDTH int(MINIMUM_WIDTH)
+#define FILTER_PANE_WIDTH int(MINIMUM_WIDTH * 0.75)
 
 //==============================================================================
 
