@@ -59,11 +59,15 @@ int SearchResultsListBoxModel::getNumRows()
 void SearchResultsListBoxModel::paintListBoxItem(int rowNumber, juce::Graphics &g, int width, int height, bool rowIsSelected)
 {
     if (rowIsSelected)
-    {
-        g.fillAll(GUI_ACCENT);
-    }
+        g.setColour(GUI_ACCENT);
+    else
+        g.setColour(GUI_PRIMARY_ELEV1);
+
+    auto rect = juce::Rectangle<float>(0.f, 0.f, (float) width - 6, (float)height * 0.9);
+    g.fillRoundedRectangle(rect, 3);
+
     g.setColour(GUI_TEXT_WHITE);
-    g.drawText(listItems[rowNumber], 0, 0, width, height, juce::Justification::centredLeft);
+    g.drawText(listItems[rowNumber], 7, 0, (int) width - 13, height, juce::Justification::centredLeft);
 }
 
 void SearchResultsListBoxModel::listBoxItemClicked(int row, const juce::MouseEvent &)
