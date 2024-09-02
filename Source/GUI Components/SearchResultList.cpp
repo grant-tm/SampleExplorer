@@ -12,7 +12,7 @@ SearchResultsListBox::SearchResultsListBox(juce::String name) : juce::ListBox(na
 }
 
 //=============================================================================
-// LOOK AND FEEL]
+// LOOK AND FEEL
 
 void SearchResultsLookAndFeel::drawScrollbar(juce::Graphics &g, juce::ScrollBar &scrollbar,
     int x, int y, int width, int height,
