@@ -52,14 +52,26 @@ private:
 
     Listener *listener = nullptr;
 
+    // Search bar
     SearchBar searchBar;
     void searchBarTextChanged() override;
 
+    // Item List
     SearchResultsListBoxModel searchResultsListBoxModel;
     SearchResultsListBox searchResultsListBox;
 
+    // Filter Pane Toggle
     juce::ToggleButton filterPaneToggleButton = juce::ToggleButton("Filter Pane Toggle");
     void buttonClicked(juce::Button *button) override;
+
+    // Key Filter
+    juce::Rectangle<int> keyFilterPane;
+
+    // BPM Filter
+    juce::Rectangle<int> bpmFilterPane;
+
+    // Tag Filter
+    juce::Rectangle<int> tagFilterPane;
 
     void dragOperationStarted (const juce::DragAndDropTarget::SourceDetails &) override;
 

@@ -41,6 +41,14 @@ void MainComponent::setListener(MainComponent::Listener *listener)
 void MainComponent::paint (juce::Graphics& g)
 {
     g.fillAll(GUI_PRIMARY_ELEV0);
+
+    if (filterPaneToggleButton.getToggleState() == true)
+    {
+        g.setColour(GUI_PRIMARY_ELEV1);
+        g.fillRect(keyFilterPane);
+        g.fillRect(bpmFilterPane);
+        g.fillRect(tagFilterPane);
+    }
 }
 
 void MainComponent::resized()
@@ -50,6 +58,21 @@ void MainComponent::resized()
     if (filterPaneToggleButton.getToggleState() == true)
     {
         auto filterSettingsBounds = bounds.removeFromRight(FILTER_PANE_WIDTH);
+        filterSettingsBounds.removeFromTop(7);
+        filterSettingsBounds.removeFromRight(7);
+
+        auto keyFilterPaneBounds = filterSettingsBounds.removeFromTop(100);
+        keyFilterPane = keyFilterPaneBounds;
+
+        filterSettingsBounds.removeFromTop(7);
+
+        auto bpmFilterPaneBounds = filterSettingsBounds.removeFromTop(100);
+        bpmFilterPane = bpmFilterPaneBounds;
+
+        filterSettingsBounds.removeFromTop(7);
+        
+        auto tagFilterPaneBounds = filterSettingsBounds;
+        tagFilterPane = tagFilterPaneBounds;
     }
 
     auto searchBarBounds = bounds;
