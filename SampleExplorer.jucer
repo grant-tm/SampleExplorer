@@ -19,11 +19,15 @@
         <FILE id="MUJL2W" name="Database.h" compile="0" resource="0" file="Source/Database/Database.h"/>
       </GROUP>
       <GROUP id="{6A9CD509-9349-5896-23BA-F5E7A8633DFF}" name="GUI Components">
-        <FILE id="y338Bp" name="BpmFilter.cpp" compile="1" resource="0" file="Source/GUI Components/BpmFilter.cpp"/>
-        <FILE id="nEBKSl" name="BpmFilter.h" compile="0" resource="0" file="Source/GUI Components/BpmFilter.h"/>
+        <GROUP id="{CEBE1807-41A2-69CB-76E3-2C12F4B45EF4}" name="Filters">
+          <FILE id="y338Bp" name="BpmFilter.cpp" compile="1" resource="0" file="Source/GUI Components/BpmFilter.cpp"/>
+          <FILE id="nEBKSl" name="BpmFilter.h" compile="0" resource="0" file="Source/GUI Components/BpmFilter.h"/>
+          <FILE id="XwK9hi" name="KeyFilter.cpp" compile="1" resource="0" file="Source/GUI Components/KeyFilter.cpp"/>
+          <FILE id="aEZHE0" name="KeyFilter.h" compile="0" resource="0" file="Source/GUI Components/KeyFilter.h"/>
+          <FILE id="UkmsRX" name="TagFilter.cpp" compile="1" resource="0" file="Source/GUI Components/TagFilter.cpp"/>
+          <FILE id="XzvtIm" name="TagFilter.h" compile="0" resource="0" file="Source/GUI Components/TagFilter.h"/>
+        </GROUP>
         <FILE id="C1Q9bn" name="ColorPalette.h" compile="0" resource="0" file="Source/GUI Components/ColorPalette.h"/>
-        <FILE id="XwK9hi" name="KeyFilter.cpp" compile="1" resource="0" file="Source/GUI Components/KeyFilter.cpp"/>
-        <FILE id="aEZHE0" name="KeyFilter.h" compile="0" resource="0" file="Source/GUI Components/KeyFilter.h"/>
         <FILE id="XrJ5j3" name="SearchBar.cpp" compile="1" resource="0" file="Source/GUI Components/SearchBar.cpp"/>
         <FILE id="hgzLLw" name="SearchBar.h" compile="0" resource="0" file="Source/GUI Components/SearchBar.h"/>
         <FILE id="uNtMvf" name="SearchBarListener.cpp" compile="1" resource="0"
@@ -34,8 +38,6 @@
               file="Source/GUI Components/SearchResultList.cpp"/>
         <FILE id="YkzpTZ" name="SearchResultList.h" compile="0" resource="0"
               file="Source/GUI Components/SearchResultList.h"/>
-        <FILE id="UkmsRX" name="TagFilter.cpp" compile="1" resource="0" file="Source/GUI Components/TagFilter.cpp"/>
-        <FILE id="XzvtIm" name="TagFilter.h" compile="0" resource="0" file="Source/GUI Components/TagFilter.h"/>
       </GROUP>
       <FILE id="QRVqki" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="ahTUNK" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
