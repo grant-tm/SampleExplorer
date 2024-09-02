@@ -20,9 +20,9 @@
       </GROUP>
       <GROUP id="{6A9CD509-9349-5896-23BA-F5E7A8633DFF}" name="GUI Components">
         <GROUP id="{CEBE1807-41A2-69CB-76E3-2C12F4B45EF4}" name="Filters">
+          <FILE id="XwK9hi" name="KeyFilter.cpp" compile="1" resource="0" file="Source/GUI Components/KeyFilter.cpp"/>
           <FILE id="y338Bp" name="BpmFilter.cpp" compile="1" resource="0" file="Source/GUI Components/BpmFilter.cpp"/>
           <FILE id="nEBKSl" name="BpmFilter.h" compile="0" resource="0" file="Source/GUI Components/BpmFilter.h"/>
-          <FILE id="XwK9hi" name="KeyFilter.cpp" compile="1" resource="0" file="Source/GUI Components/KeyFilter.cpp"/>
           <FILE id="aEZHE0" name="KeyFilter.h" compile="0" resource="0" file="Source/GUI Components/KeyFilter.h"/>
           <FILE id="UkmsRX" name="TagFilter.cpp" compile="1" resource="0" file="Source/GUI Components/TagFilter.cpp"/>
           <FILE id="XzvtIm" name="TagFilter.h" compile="0" resource="0" file="Source/GUI Components/TagFilter.h"/>
