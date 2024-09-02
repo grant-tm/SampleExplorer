@@ -10,16 +10,20 @@
         <FILE id="l7ZD3H" name="WavFileReader.cpp" compile="1" resource="0"
               file="Source/Audio IO/WavFileReader.cpp"/>
         <FILE id="HaGZVq" name="WavFileReader.h" compile="0" resource="0" file="Source/Audio IO/WavFileReader.h"/>
+        <FILE id="QJJBCP" name="SamplePlayer.cpp" compile="1" resource="0"
+              file="Source/GUI Components/SamplePlayer.cpp"/>
+        <FILE id="ChgZYO" name="SamplePlayer.h" compile="0" resource="0" file="Source/GUI Components/SamplePlayer.h"/>
       </GROUP>
       <GROUP id="{66217757-34E7-3C1B-0AFB-F72CBCC05414}" name="Database">
         <FILE id="zNeCaS" name="Database.cpp" compile="1" resource="0" file="Source/Database/Database.cpp"/>
         <FILE id="MUJL2W" name="Database.h" compile="0" resource="0" file="Source/Database/Database.h"/>
       </GROUP>
       <GROUP id="{6A9CD509-9349-5896-23BA-F5E7A8633DFF}" name="GUI Components">
+        <FILE id="y338Bp" name="BpmFilter.cpp" compile="1" resource="0" file="Source/GUI Components/BpmFilter.cpp"/>
+        <FILE id="nEBKSl" name="BpmFilter.h" compile="0" resource="0" file="Source/GUI Components/BpmFilter.h"/>
         <FILE id="C1Q9bn" name="ColorPalette.h" compile="0" resource="0" file="Source/GUI Components/ColorPalette.h"/>
-        <FILE id="QJJBCP" name="SamplePlayer.cpp" compile="1" resource="0"
-              file="Source/GUI Components/SamplePlayer.cpp"/>
-        <FILE id="ChgZYO" name="SamplePlayer.h" compile="0" resource="0" file="Source/GUI Components/SamplePlayer.h"/>
+        <FILE id="XwK9hi" name="KeyFilter.cpp" compile="1" resource="0" file="Source/GUI Components/KeyFilter.cpp"/>
+        <FILE id="aEZHE0" name="KeyFilter.h" compile="0" resource="0" file="Source/GUI Components/KeyFilter.h"/>
         <FILE id="XrJ5j3" name="SearchBar.cpp" compile="1" resource="0" file="Source/GUI Components/SearchBar.cpp"/>
         <FILE id="hgzLLw" name="SearchBar.h" compile="0" resource="0" file="Source/GUI Components/SearchBar.h"/>
         <FILE id="uNtMvf" name="SearchBarListener.cpp" compile="1" resource="0"
@@ -30,6 +34,8 @@
               file="Source/GUI Components/SearchResultList.cpp"/>
         <FILE id="YkzpTZ" name="SearchResultList.h" compile="0" resource="0"
               file="Source/GUI Components/SearchResultList.h"/>
+        <FILE id="UkmsRX" name="TagFilter.cpp" compile="1" resource="0" file="Source/GUI Components/TagFilter.cpp"/>
+        <FILE id="XzvtIm" name="TagFilter.h" compile="0" resource="0" file="Source/GUI Components/TagFilter.h"/>
       </GROUP>
       <FILE id="QRVqki" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="ahTUNK" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
