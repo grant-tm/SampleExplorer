@@ -20,6 +20,8 @@ MainComponent::MainComponent() :
 
     filterPaneToggleButton.addListener(this);
     addAndMakeVisible(filterPaneToggleButton);
+
+    addAndMakeVisible(bpmFilter);
 }
 
 MainComponent::~MainComponent()
@@ -32,9 +34,9 @@ MainComponent::~MainComponent()
     filterPaneToggleButton.removeListener(this);
 }
 
-void MainComponent::setListener(MainComponent::Listener *listener)
+void MainComponent::setListener(MainComponent::Listener *lstner)
 {
-    this->listener = listener;
+    this->listener = lstner;
 }
 
 //==============================================================================
@@ -46,7 +48,6 @@ void MainComponent::paint (juce::Graphics& g)
     {
         g.setColour(GUI_PRIMARY_ELEV1);
         g.fillRect(keyFilterPane);
-        g.fillRect(bpmFilterPane);
         g.fillRect(tagFilterPane);
     }
 }
@@ -66,8 +67,8 @@ void MainComponent::resized()
 
         filterSettingsBounds.removeFromTop(7);
 
-        auto bpmFilterPaneBounds = filterSettingsBounds.removeFromTop(100);
-        bpmFilterPane = bpmFilterPaneBounds;
+        auto bpmFilterBounds = filterSettingsBounds.removeFromTop(100);
+        bpmFilter.setBounds(bpmFilterBounds);
 
         filterSettingsBounds.removeFromTop(7);
         

@@ -9,6 +9,7 @@
 #include "GUI Components/SearchBar.h"
 #include "GUI Components/SearchBarListener.h"
 #include "GUI Components/SearchResultList.h"
+#include "GUI Components/BpmFilter/BpmFilter.h"
 
 #define DEFAULT_WIDTH   360
 #define DEFAULT_HEIGHT  490
@@ -68,7 +69,7 @@ private:
     juce::Rectangle<int> keyFilterPane;
 
     // BPM Filter
-    juce::Rectangle<int> bpmFilterPane;
+    BpmFilter bpmFilter;
 
     // Tag Filter
     juce::Rectangle<int> tagFilterPane;
