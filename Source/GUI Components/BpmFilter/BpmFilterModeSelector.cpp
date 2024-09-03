@@ -1,15 +1,17 @@
 #include "BpmFilterModeSelector.h"
 
+//-----------------------------------------------------------------------------
+
 BpmFilterModeSelector::BpmFilterModeSelector() : juce::Component()
 {
     addAndMakeVisible(exactToggleButton);
     exactToggleButton.addListener(this);
-    exactToggleButton.setToggleState(false, false);
+    exactToggleButton.setToggleState(false, juce::NotificationType::dontSendNotification);
     exactToggleButton.setLookAndFeel(&lookAndFeel);
 
     addAndMakeVisible(rangeToggleButton);
     rangeToggleButton.addListener(this);
-    rangeToggleButton.setToggleState(true, false);
+    rangeToggleButton.setToggleState(true, juce::NotificationType::dontSendNotification);
     rangeToggleButton.setLookAndFeel(&lookAndFeel);
 }
 
@@ -22,6 +24,8 @@ BpmFilterModeSelector::~BpmFilterModeSelector()
     rangeToggleButton.setLookAndFeel(nullptr);
 }
 
+//-----------------------------------------------------------------------------
+
 void BpmFilterModeSelector::resized()
 {
     auto bounds = getLocalBounds();
@@ -33,17 +37,31 @@ void BpmFilterModeSelector::resized()
     rangeToggleButton.setBounds(rangeBounds);
 }
 
+void BpmFilterModeSelector::setListener(BpmFilterModeSelector::Listener *lstner)
+{
+    this->listener = lstner;
+}
 
 void BpmFilterModeSelector::buttonClicked(juce::Button *button)
 {
     if (button->getButtonText() == "Exact")
     {
         auto state = exactToggleButton.getToggleState();
-        rangeToggleButton.setToggleState(!state, false);
+        rangeToggleButton.setToggleState(!state, juce::NotificationType::dontSendNotification);
+        if (listener)
+        {
+            auto mode = state ? BpmFilterMode::Range : BpmFilterMode::Exact;
+            listener->updateMode(mode);
+        }
     }
     if (button->getButtonText() == "Range")
     {
         auto state = rangeToggleButton.getToggleState();
-        exactToggleButton.setToggleState(!state, false);
+        exactToggleButton.setToggleState(!state, juce::NotificationType::dontSendNotification);
+        if (listener)
+        {
+            auto mode = state ? BpmFilterMode::Exact : BpmFilterMode::Range;
+            listener->updateMode(mode);
+        }
     }
 }

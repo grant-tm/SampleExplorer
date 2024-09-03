@@ -14,12 +14,28 @@ public:
     ~BpmFilterModeSelector();
 
     void resized() override;
-    void paint(juce::Graphics &g) override {};
+    void paint(juce::Graphics &g) override { juce::ignoreUnused(g); }
+
+    enum BpmFilterMode
+    {
+        Exact,
+        Range
+    };
+
+    class Listener
+    {
+    public:
+        virtual ~Listener() {}
+        virtual void updateMode(BpmFilterMode mode) = 0;
+    };
+    void setListener(BpmFilterModeSelector::Listener *);
 
 private:
     juce::ToggleButton exactToggleButton = juce::ToggleButton("Exact");
     juce::ToggleButton rangeToggleButton = juce::ToggleButton("Range");
     BpmFilterModeSelectorLookAndFeel lookAndFeel;
+
+    BpmFilterModeSelector::Listener *listener = nullptr;
 
     void buttonClicked(juce::Button *button) override;
 };
