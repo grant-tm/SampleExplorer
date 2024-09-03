@@ -26,7 +26,7 @@ public:
     {
     public:
         virtual ~Listener() {}
-        virtual void updateMode(BpmFilterMode mode) = 0;
+        virtual void switchMode() = 0;
     };
     void setListener(BpmFilterModeSelector::Listener *);
 

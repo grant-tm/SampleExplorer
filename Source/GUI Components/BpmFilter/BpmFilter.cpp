@@ -79,3 +79,9 @@ void BpmFilter::sliderValueChanged(juce::Slider *slider)
     }
     resized();
 }
+
+void BpmFilter::switchMode()
+{
+    filterSlider.switchMode();
+    sliderValueChanged(&filterSlider);
+}

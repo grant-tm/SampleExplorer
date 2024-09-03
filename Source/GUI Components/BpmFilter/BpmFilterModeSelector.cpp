@@ -51,7 +51,7 @@ void BpmFilterModeSelector::buttonClicked(juce::Button *button)
         if (listener)
         {
             auto mode = state ? BpmFilterMode::Range : BpmFilterMode::Exact;
-            listener->updateMode(mode);
+            listener->switchMode();
         }
     }
     if (button->getButtonText() == "Range")
@@ -61,7 +61,7 @@ void BpmFilterModeSelector::buttonClicked(juce::Button *button)
         if (listener)
         {
             auto mode = state ? BpmFilterMode::Exact : BpmFilterMode::Range;
-            listener->updateMode(mode);
+            listener->switchMode();
         }
     }
 }
