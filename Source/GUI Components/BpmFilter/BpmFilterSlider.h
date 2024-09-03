@@ -14,6 +14,8 @@ public:
 
 private:
 
+	BpmFilterSlider::Listener *listener = nullptr;
+
 	BpmFilterSliderLookAndFeel filterSliderLNF;
 
 	int sliderLowerThumbValue = 90;

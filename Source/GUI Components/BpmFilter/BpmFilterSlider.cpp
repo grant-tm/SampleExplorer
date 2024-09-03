@@ -48,4 +48,5 @@ void BpmFilterSlider::sliderValueChanged(juce::Slider *slider)
 		sliderLowerThumbValue = (int) slider->getMinValue();
 		sliderUpperThumbValue = (int) slider->getMaxValue();
 	}
+	resized();
 }
