@@ -3,8 +3,8 @@
 
 #include <JuceHeader.h>
 #include "../ColorPalette.h"
+#include "../ModeSelector.h"
 #include "Keyboard.h"
-#include "ModeSelector.h"
 
 class KeyFilter : public juce::Component
 {
