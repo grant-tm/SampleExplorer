@@ -9,6 +9,8 @@
 #include "GUI Components/SearchBar.h"
 #include "GUI Components/SearchBarListener.h"
 #include "GUI Components/SearchResultList.h"
+
+#include "GUI Components/KeyFilter/KeyFilter.h"
 #include "GUI Components/BpmFilter/BpmFilter.h"
 
 #define DEFAULT_WIDTH   360
@@ -65,10 +67,7 @@ private:
     juce::ToggleButton filterPaneToggleButton = juce::ToggleButton("Filter Pane Toggle");
     void buttonClicked(juce::Button *button) override;
 
-    // Key Filter
-    juce::Rectangle<int> keyFilterPane;
-
-    // BPM Filter
+    KeyFilter keyFilter;
     BpmFilter bpmFilter;
 
     // Tag Filter

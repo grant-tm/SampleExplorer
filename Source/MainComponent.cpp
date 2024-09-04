@@ -21,6 +21,7 @@ MainComponent::MainComponent() :
     filterPaneToggleButton.addListener(this);
     addAndMakeVisible(filterPaneToggleButton);
 
+    addAndMakeVisible(keyFilter);
     addAndMakeVisible(bpmFilter);
 }
 
@@ -47,7 +48,6 @@ void MainComponent::paint (juce::Graphics& g)
     if (filterPaneToggleButton.getToggleState() == true)
     {
         g.setColour(GUI_PRIMARY_ELEV1);
-        g.fillRect(keyFilterPane);
         g.fillRect(tagFilterPane);
     }
 }
@@ -62,8 +62,8 @@ void MainComponent::resized()
         filterSettingsBounds.removeFromTop(7);
         filterSettingsBounds.removeFromRight(7);
 
-        auto keyFilterPaneBounds = filterSettingsBounds.removeFromTop(100);
-        keyFilterPane = keyFilterPaneBounds;
+        auto keyFilterPaneBounds = filterSettingsBounds.removeFromTop(150);
+        keyFilter.setBounds(keyFilterPaneBounds);
 
         filterSettingsBounds.removeFromTop(7);
 
