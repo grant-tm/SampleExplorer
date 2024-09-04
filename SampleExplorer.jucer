@@ -39,7 +39,28 @@
           <FILE id="SndYKE" name="BpmFilterSliderLookAndFeel.h" compile="0" resource="0"
                 file="Source/GUI Components/BpmFilter/BpmFilterSliderLookAndFeel.h"/>
         </GROUP>
+        <GROUP id="{AC1E9345-7CA8-9DC3-CA17-A6FCD7AAE2A1}" name="KeyFilter">
+          <FILE id="rowM3R" name="BlackKeyLookAndFeel.cpp" compile="1" resource="0"
+                file="Source/GUI Components/KeyFilter/BlackKeyLookAndFeel.cpp"/>
+          <FILE id="nEOfH5" name="BlackKeyLookAndFeel.h" compile="0" resource="0"
+                file="Source/GUI Components/KeyFilter/BlackKeyLookAndFeel.h"/>
+          <FILE id="lPfC4q" name="Keyboard.cpp" compile="1" resource="0" file="Source/GUI Components/KeyFilter/Keyboard.cpp"/>
+          <FILE id="Bu0MTS" name="Keyboard.h" compile="0" resource="0" file="Source/GUI Components/KeyFilter/Keyboard.h"/>
+          <FILE id="Sz0Ld8" name="KeyFilter.cpp" compile="1" resource="0" file="Source/GUI Components/KeyFilter/KeyFilter.cpp"/>
+          <FILE id="dWSp04" name="KeyFilter.h" compile="0" resource="0" file="Source/GUI Components/KeyFilter/KeyFilter.h"/>
+          <FILE id="paWrsA" name="WhiteKeyLookAndFeel.cpp" compile="1" resource="0"
+                file="Source/GUI Components/KeyFilter/WhiteKeyLookAndFeel.cpp"/>
+          <FILE id="I0uhS5" name="WhiteKeyLookAndFeel.h" compile="0" resource="0"
+                file="Source/GUI Components/KeyFilter/WhiteKeyLookAndFeel.h"/>
+        </GROUP>
         <FILE id="C1Q9bn" name="ColorPalette.h" compile="0" resource="0" file="Source/GUI Components/ColorPalette.h"/>
+        <FILE id="McAJgB" name="ModeSelector.cpp" compile="1" resource="0"
+              file="Source/GUI Components/ModeSelector.cpp"/>
+        <FILE id="yiYU6X" name="ModeSelector.h" compile="0" resource="0" file="Source/GUI Components/ModeSelector.h"/>
+        <FILE id="lCrtEH" name="ModeSelectorLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/GUI Components/ModeSelectorLookAndFeel.cpp"/>
+        <FILE id="bibKQK" name="ModeSelectorLookAndFeel.h" compile="0" resource="0"
+              file="Source/GUI Components/ModeSelectorLookAndFeel.h"/>
         <FILE id="XrJ5j3" name="SearchBar.cpp" compile="1" resource="0" file="Source/GUI Components/SearchBar.cpp"/>
         <FILE id="hgzLLw" name="SearchBar.h" compile="0" resource="0" file="Source/GUI Components/SearchBar.h"/>
         <FILE id="uNtMvf" name="SearchBarListener.cpp" compile="1" resource="0"
