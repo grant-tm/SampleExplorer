@@ -60,7 +60,9 @@ void BpmFilter::resized()
 
 void BpmFilter::paint(juce::Graphics &g)
 {
-    g.fillAll(GUI_PRIMARY_ELEV1);
+    auto bounds = getLocalBounds();
+    g.setColour(GUI_PRIMARY_ELEV1);
+    g.fillRoundedRectangle(bounds.toFloat(), 2);
 }
 
 void BpmFilter::sliderValueChanged(juce::Slider *slider)
