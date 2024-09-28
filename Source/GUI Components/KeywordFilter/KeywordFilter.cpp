@@ -1,9 +1,5 @@
 #include "KeywordFilter.h"
 
-//=============================================================================
-//
-//=============================================================================
-
 KeywordFilter::KeywordFilter() : juce::Button::Listener()
 {
     addAndMakeVisible(label);
@@ -27,10 +23,6 @@ KeywordFilter::~KeywordFilter()
         button.setLookAndFeel(nullptr);
     }
 }
-
-//=============================================================================
-//
-//=============================================================================
 
 void KeywordFilter::resized()
 {
@@ -59,14 +51,10 @@ void KeywordFilter::paint(juce::Graphics &g)
 	g.fillRoundedRectangle(bounds.toFloat(), 2);
 }
 
-//=============================================================================
-//
-//=============================================================================
-
-juce::StringArray KeywordFilter::splitStringByDelimiters(const juce::String &str, const juce::String &delimiters)
+juce::StringArray KeywordFilter::splitStringByDelimiters(const juce::String &str)
 {
     juce::StringArray tokens;
-    tokens.addTokens(str, delimiters, "\"");
+    tokens.addTokens(str, " -_.0123456789", "\"");
     tokens.trim();
     tokens.removeEmptyStrings();
 
@@ -89,13 +77,13 @@ juce::StringArray KeywordFilter::splitStringByDelimiters(const juce::String &str
     return tokens;
 }
 
-void KeywordFilter::getMostCommonKeywords(const juce::StringArray &filenames, const juce::String &delimiters)
+void KeywordFilter::getMostCommonKeywords(const juce::StringArray &filenames)
 {
     // pair keywords to frequency
     std::unordered_map<juce::String, int> tokenFrequency;
     for (const auto &filename : filenames)
     {
-        juce::StringArray tokens = splitStringByDelimiters(filename, delimiters);
+        juce::StringArray tokens = splitStringByDelimiters(filename);
         for (const auto &token : tokens)
             tokenFrequency[token]++;
     }
@@ -116,11 +104,7 @@ void KeywordFilter::renderButtons()
     for (auto &button : buttons)
     {
         if (button.getToggleState() == false)
-        {
-            //button.setVisible(false);
             button.setButtonText("");
-            //button.setBounds(0, 0, 0, 0);
-        }
     }
 
     // font setup

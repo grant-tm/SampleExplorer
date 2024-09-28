@@ -15,12 +15,11 @@ public:
         auto bounds = button.getLocalBounds().toFloat();
 
         juce::Colour baseColour = button.getToggleState() ? GUI_ACCENT : GUI_PRIMARY_ELEV2;
-
         g.setColour(baseColour);
         g.fillRoundedRectangle(bounds, 4.f);
 
-
-        g.setColour(button.findColour(juce::ToggleButton::textColourId));
+        juce::Colour textColour = button.getToggleState() ? GUI_TEXT_WHITE : juce::Colour(0xFF959595);
+        g.setColour(textColour);
         g.setFont(juce::Font(16.0f, juce::Font::bold));
         g.drawText(button.getButtonText(), bounds, juce::Justification::centred, true);
     }
@@ -41,7 +40,7 @@ public:
     void setItems(juce::StringArray items)
     {
         listItems = items;
-        getMostCommonKeywords(items, " -_.0123456789");
+        getMostCommonKeywords(items);
         resized();
     }
 
@@ -59,8 +58,8 @@ private:
     juce::ToggleButton buttons[KEYWORD_FILTER_MAX_BUTTONS];
     KeywordToggleLNF lnf;
 
-    juce::StringArray KeywordFilter::splitStringByDelimiters(const juce::String &str, const juce::String &delimiters);
-    void KeywordFilter::getMostCommonKeywords(const juce::StringArray &filenames, const juce::String &delimiters);
+    juce::StringArray KeywordFilter::splitStringByDelimiters(const juce::String &str);
+    void KeywordFilter::getMostCommonKeywords(const juce::StringArray &filenames);
 };
 
 
