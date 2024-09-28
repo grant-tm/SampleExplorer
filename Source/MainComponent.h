@@ -12,6 +12,7 @@
 
 #include "GUI Components/KeyFilter/KeyFilter.h"
 #include "GUI Components/BpmFilter/BpmFilter.h"
+#include "GUI Components/KeywordFilter/KeywordFilter.h"
 
 #define DEFAULT_WIDTH   360
 #define DEFAULT_HEIGHT  490
@@ -69,6 +70,7 @@ private:
 
     KeyFilter keyFilter;
     BpmFilter bpmFilter;
+    KeywordFilter keywordFilter;
 
     // Tag Filter
     juce::Rectangle<int> tagFilterPane;

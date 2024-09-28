@@ -53,6 +53,11 @@
           <FILE id="I0uhS5" name="WhiteKeyLookAndFeel.h" compile="0" resource="0"
                 file="Source/GUI Components/KeyFilter/WhiteKeyLookAndFeel.h"/>
         </GROUP>
+        <GROUP id="{D107D3D4-912B-9775-8415-A1C4DE259E8B}" name="KeywordFilter">
+          <FILE id="KckrqQ" name="KeywordFilter.cpp" compile="1" resource="0"
+                file="Source/GUI Components/KeywordFilter/KeywordFilter.cpp"/>
+          <FILE id="mdHT37" name="KeywordFilter.h" compile="0" resource="0" file="Source/GUI Components/KeywordFilter/KeywordFilter.h"/>
+        </GROUP>
         <FILE id="C1Q9bn" name="ColorPalette.h" compile="0" resource="0" file="Source/GUI Components/ColorPalette.h"/>
         <FILE id="McAJgB" name="ModeSelector.cpp" compile="1" resource="0"
               file="Source/GUI Components/ModeSelector.cpp"/>

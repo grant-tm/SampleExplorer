@@ -3,7 +3,7 @@
 //==============================================================================
 MainComponent::MainComponent() : 
     searchResultsListBox("ListBox"), 
-    searchResultsListBoxModel(database, listItems) 
+    searchResultsListBoxModel(database, listItems)
 {
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     setWantsKeyboardFocus(true);
@@ -23,6 +23,7 @@ MainComponent::MainComponent() :
 
     addAndMakeVisible(keyFilter);
     addAndMakeVisible(bpmFilter);
+    addAndMakeVisible(keywordFilter);
 }
 
 MainComponent::~MainComponent()
@@ -71,9 +72,10 @@ void MainComponent::resized()
         bpmFilter.setBounds(bpmFilterBounds);
 
         filterSettingsBounds.removeFromTop(7);
-        
+        filterSettingsBounds.removeFromBottom(7);
+
         auto tagFilterPaneBounds = filterSettingsBounds;
-        tagFilterPane = tagFilterPaneBounds;
+        keywordFilter.setBounds(tagFilterPaneBounds);
     }
 
     auto searchBarBounds = bounds;
@@ -108,6 +110,7 @@ void MainComponent::searchBarTextChanged()
 
     searchResultsListBoxModel.setItems(listItems);
     searchResultsListBox.updateContent();
+    keywordFilter.setItems(listItems);
 }
 
 void MainComponent::dragOperationStarted(const juce::DragAndDropTarget::SourceDetails &source)
